@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/haodiaodemingzi/cloudfeet/cloudfeet-config/routers"
@@ -22,18 +21,18 @@ func init() {
 // @license.name MIT
 // @license.url https://github.com/EDDYCJY/go-gin-example/blob/master/LICENSE
 func main() {
-	gin.SetMode(settings.Cfg.GetString('gin.run_mode')
+	gin.SetMode(gin.DebugMode)
 	routersInit := routers.InitRouter()
 	// readTimeout := setting.ServerSetting.ReadTimeout
 	// writeTimeout := setting.ServerSetting.WriteTimeout
-	endPoint := fmt.Sprintf(":%d", 
+	endPoint := fmt.Sprintf(":%d", settings.Cfg.GetInt("gin.port"))
 	maxHeaderBytes := 1 << 20
 
 	server := &http.Server{
 		Addr:           endPoint,
 		Handler:        routersInit,
-		// ReadTimeout:    readTimeout,
-		// WriteTimeout:   writeTimeout,
+		ReadTimeout:    60,
+		WriteTimeout:   60,
 		MaxHeaderBytes: maxHeaderBytes,
 	}
 

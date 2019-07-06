@@ -1,11 +1,10 @@
 package routers
 
 import (
-	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-	"github.com/haodiaodemingzi/cloudfeet/cloudfeet-config/api/v1"
+	"github.com/haodiaodemingzi/cloudfeet/cloudfeet-config/routers/api/v1"
 )
 
 // InitRouter initialize routing information
@@ -17,7 +16,7 @@ func InitRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	apiv1 := r.Group("/api/v1")
-    apiv1.GET("/config", v1.GetConfig))
+        apiv1.GET("/config", v1.GetConfig)
 
 	return r
 }

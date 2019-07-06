@@ -7,13 +7,13 @@ import (
 
 	"github.com/spf13/viper"
 )
-var Cfg = &Config{}
+var Cfg = viper.New()
 
 // FindRootDir find root dir for project
 func FindRootDir() string {
 	_, filename, _, _ := runtime.Caller(0)
 	abspath := path.Join(path.Dir(filename), "..")
-    return abspath
+	return abspath
 }
 
 // Setup init all config
@@ -21,12 +21,10 @@ func Setup() {
 	configPath := path.Join(FindRootDir(), "conf")
 	fmt.Println(configPath)
 
-	viper.SetConfigName("app")
-	viper.AddConfigPath(configPath)
-	err := viper.ReadInConfig()
+	Cfg.SetConfigName("app")
+	Cfg.AddConfigPath(configPath)
+	err := Cfg.ReadInConfig()
 	if err != nil {
 		panic(err)
 	}
-	viper.Unmarshal(Cfg)
 }
-
