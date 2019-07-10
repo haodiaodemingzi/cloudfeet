@@ -1,0 +1,4 @@
+config:
+  image: "f34a27067be3"
+  ports:
+   - "9001:8080"
