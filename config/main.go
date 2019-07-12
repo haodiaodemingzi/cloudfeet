@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/haodiaodemingzi/cloudfeet/common/gmysql"
@@ -20,12 +21,10 @@ func init() {
 // @description An config api
 // @termsOfService https://github.com/haodiaodemingzi/cloudfeet
 func main() {
-	logging.Info("Hello Walrus before FullTimestamp=true")
-
 	gin.SetMode(gin.DebugMode)
 	r := routers.InitRouter()
 	endPoint := fmt.Sprintf("%s:%d", settings.Config.Gin.Host, settings.Config.Gin.Port)
-	logging.Info("Start web server with endpoint: %s", endPoint)
+	logging.Info("Start cloudfeet-config web service with endpoint: %s", endPoint)
 
 	r.Run(endPoint)
 }

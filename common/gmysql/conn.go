@@ -2,11 +2,12 @@ package gmysql
 
 import (
 	"database/sql"
+	"log"
 	"time"
 
 	"github.com/didi/gendry/manager"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/haodiaodemingzi/common/settings"
+	"github.com/haodiaodemingzi/cloudfeet/common/settings"
 )
 
 // DB mysql global
@@ -28,6 +29,7 @@ func Setup() {
 		manager.SetTimeout(5*time.Second),
 		manager.SetReadTimeout(5*time.Second)).Port(port).Open(true)
 	if err != nil {
+		log.Println("conncet mysql error!!!")
 		panic(err)
 	}
 
