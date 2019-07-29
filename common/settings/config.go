@@ -20,12 +20,13 @@ type ConfModel struct {
 	ImageAllowExts  []string
 	LogSavePath     string
 	LogSaveName     string
-	Root            Root  `json:"root"`
-	CORS            CORS  `json:"cors"`
-	MySQL           MySQL `json:"mysql"`
-	Redis           Redis `json:"redis"`
-	Log             Log   `json:"log"`
-	Gin             Gin   `Gin:"gin"`
+	Root            Root    `json:"root"`
+	CORS            CORS    `json:"cors"`
+	MySQL           MySQL   `json:"mysql"`
+	Redis           Redis   `json:"redis"`
+	Outline         Outline `json:"outline"`
+	Log             Log     `json:"log"`
+	Gin             Gin     `Gin:"gin"`
 }
 
 // Log config
@@ -33,6 +34,12 @@ type Log struct {
 	Level  string `json:"level"`
 	Format string `json:"format"`
 	Path   string `json:"path"`
+}
+
+type Outline struct {
+	Server string `json:"server"`
+	Port   string `json:"port"`
+	ApiKey string `json:"api_key"`
 }
 
 // Root config
