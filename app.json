@@ -1,0 +1,13 @@
+{
+    "gin": {
+        "port": 8082,
+        "host": "localhost"
+    },
+    "mysql": {
+        "database": "cloudfeet",
+        "host": "eventest.chebu9wxwjkd.ap-east-1.rds.amazonaws.com",
+        "port": 3306,
+        "user": "evenpay",
+        "password": "evenfintech"
+    }
+}
