@@ -64,10 +64,6 @@ for app in app_list:
     os.chdir(build_path)
     print "build_path = ", build_path
 
-    # build go app
-    os.system("go get -v .")
-    os.system("go build .")
-
     # push docker images
     for item in (tag, commit):
         image_name = "registry.cn-{0}.aliyuncs.com/1024w/cloudfeet-{1}:{2}".format(region, app, item)

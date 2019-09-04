@@ -1,4 +1,6 @@
 language: go
+go:
+  - 1.12.x
 sudo: false
 
 services:
@@ -19,6 +21,8 @@ jobs:
         - export DOCKER_PASS=6snC9AznJpjWZAw
         - export DOCKER_REPO=registry.cn-hongkong.aliyuncs.com
         - echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin $DOCKER_REPO
+        - go get -v .
+        - go build .
         - python package.py
       if: branch =~ /^(master|release|production|stable).*$/
 
