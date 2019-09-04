@@ -1,7 +1,7 @@
 {
     "gin": {
         "port": 8082,
-        "host": "localhost"
+        "host": "0.0.0.0"
     },
     "mysql": {
         "database": "cloudfeet",
