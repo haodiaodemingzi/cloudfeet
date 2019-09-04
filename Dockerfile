@@ -1,10 +1,13 @@
-FROM alpine:latest
-ENV APP_PATH=/opt/cloudfeet/backend
-RUN apk --no-cache add curl ca-certificates bash
-RUN mkdir -p /opt/cloudfeet
-COPY cloudfeet $APP_PATH
-RUN chmod +x $APP_PATH
-CMD ["$APP_PATH"]
+FROM golang:latest AS builder
+ENV BUILD_DIR /go/src/github.com/haodiaodemingzi/cloudfeet
+ENV APP cloudfeet-api
+RUN mkdir -p $BUILD_DIR
+ADD . $BUILD_DIR
+WORKDIR $BUILD_DIR
+RUN go get -v .
+RUN CGO_ENABLED=0 go build -o $APP .
+
+CMD ["$APP"]
 expose 8082
 
 
