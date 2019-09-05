@@ -1,4 +1,6 @@
-config:
-  image: "f34a27067be3"
-  ports:
-   - "9001:8080"
+version: '2'
+services:
+  api:
+    image: registry.cn-hongkong.aliyuncs.com/1024w/cloudfeet-api:release
+    ports:
+    - 8082:8082

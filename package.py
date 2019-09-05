@@ -52,7 +52,7 @@ print "active = {0}, region = {1}, tag={2}, commit={3}".format(active, region, t
 
 project = 'cloudfeet'
 app_list = {
-    'backend': { 'port': 8082},
+    'api': { 'port': 8082},
 }
 
 
