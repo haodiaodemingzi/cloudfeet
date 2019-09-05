@@ -25,8 +25,8 @@ except:
 
 env = os.environ
 
-branch = os.getenv('TRAVIS_BRANCH', 'release')
-commit = os.getenv('TRAVIS_COMMIT', 'abcd123')
+branch = os.getenv('GITHUB_REF', 'release')
+commit = os.getenv('GITHUB_SHA', 'abcd123')
 tag = 'latest'
 
 if re.search(r'master', branch):
