@@ -17,5 +17,5 @@ ADD . $BUILD_DIR
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o /usr/bin/$APP
 RUN chmod +x /usr/bin/$APP
 
-CMD ["$APP"]
+CMD ["cloudfeet-api"]
 expose 8082
