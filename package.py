@@ -25,8 +25,8 @@ except:
 
 env = os.environ
 
-branch = os.getenv('TRAVIS_BRANCH', 'release')
-commit = os.getenv('TRAVIS_COMMIT', 'abcd123')
+branch = os.getenv('GITHUB_REF', 'release')
+commit = os.getenv('GITHUB_SHA', 'abcd123')
 tag = 'latest'
 
 if re.search(r'master', branch):
@@ -52,7 +52,7 @@ print "active = {0}, region = {1}, tag={2}, commit={3}".format(active, region, t
 
 project = 'cloudfeet'
 app_list = {
-    'backend': { 'port': 8082},
+    'api': { 'port': 8082},
 }
 
 
@@ -63,10 +63,6 @@ for app in app_list:
     build_path = os.path.join(cwd)
     os.chdir(build_path)
     print "build_path = ", build_path
-
-    # build go app
-    os.system("go get -v .")
-    os.system("go build .")
 
     # push docker images
     for item in (tag, commit):
