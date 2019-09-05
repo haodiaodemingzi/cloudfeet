@@ -40,8 +40,11 @@ elif re.search(r'test|staging', branch):
 elif re.search(r'dev', branch):
     tag = 'dev'
     active = 'dev'
-elif re.search(r'release', branch):
-    tag = branch
+elif re.search(r'release|master', branch):
+    tag = 'latest'
+    active = 'prod'
+elif re.search(r'tag', branch):
+    tag = re.search(r'tag.(v[\d\.]+)', branch).group(1)
     active = 'prod'
 else:
     tag = branch
