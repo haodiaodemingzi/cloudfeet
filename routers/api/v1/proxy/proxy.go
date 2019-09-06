@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/haodiaodemingzi/cloudfeet/common/e"
 	"github.com/haodiaodemingzi/cloudfeet/common/logging"
-	proxyService "github.com/haodiaodemingzi/cloudfeet/service/proxy_service"
+	proxyService "github.com/haodiaodemingzi/cloudfeet/services/proxy_service"
 
 	res "github.com/haodiaodemingzi/cloudfeet/common/http/response"
 )

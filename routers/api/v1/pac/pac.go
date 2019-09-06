@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/haodiaodemingzi/cloudfeet/common/e"
 	"github.com/haodiaodemingzi/cloudfeet/common/logging"
-	"github.com/haodiaodemingzi/cloudfeet/service/pac_service"
+	"github.com/haodiaodemingzi/cloudfeet/services/pac_service"
 
 	res "github.com/haodiaodemingzi/cloudfeet/common/http/response"
 )
