@@ -27,6 +27,7 @@ type ConfModel struct {
 	Outline         Outline `json:"outline"`
 	Log             Log     `json:"log"`
 	Gin             Gin     `Gin:"gin"`
+	Jwt             Jwt     `Jwt:"jwt"`
 }
 
 // Log config
@@ -83,6 +84,12 @@ type Redis struct {
 	MaxIdle     int
 	MaxActive   int
 	IdleTimeout time.Duration
+}
+
+// Jwt config
+type Jwt struct {
+	Secret     string `json:"secret"`
+	ExpireHour int64  `json:"expire_hour"`
 }
 
 var RedisConfig = &Redis{}

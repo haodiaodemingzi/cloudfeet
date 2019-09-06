@@ -1,12 +1,39 @@
 # cloudfeet api 接口
 
+
 >SS配置,域名采集,域名鉴定 
+
+## 获取API访问token
+URI地址: `/api/v1/auth/token`
+请求方法: `POST`
+请求参数: json
+
+```json
+// 测试阶段随便填
+{
+    "username": "ooxxx",
+    "password": "ooxx123" 
+}
+```
+响应JSON:
+
+```json
+{
+    "code": 200,
+    "msg": "ok",
+    "data": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo"
+    }
+}
+```
 
 ## 拉取SS服务器配置
 
 URI地址: `/api/v1/proxy`
 请求方法: `GET`
-请求参数: 无
+请求参数: 
+header:
+    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
 
 响应JSON:
 
@@ -31,6 +58,8 @@ URI地址: `/api/v1/proxy`
 URI地址:  `/api/v1/pac/domains`
 请求方法: `POST`
 请求json:
+header:
+    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
 
 ```
 {
@@ -62,7 +91,9 @@ URI地址:  `/api/v1/pac/domains`
 
 URI地址: `/api/v1/pac/domains
 请求方法: `GET
-请求参数: 无                                                                                                                                                                  
+请求参数: 无                                                                                                                               header:
+    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+                                   
 
 最大拉取1000个域名
 
@@ -96,6 +127,8 @@ URI地址: `/api/v1/pac/domains
 URI地址: `/api/v1/pac/domains?status=1
 
 请求参数: 无
+header:
+    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
 
 请求方法：GET
 
@@ -129,7 +162,10 @@ URI地址: `/api/v1/pac/domains?status=1
 ## 提交判定后的域名结果
 
 URI地址: `/api/v1/checker/domains
-请求方法: ` PUT
+请求方法: `PUT`
+header:
+    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+
 请求JSON:
 
 ```json

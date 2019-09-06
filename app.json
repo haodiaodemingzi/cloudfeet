@@ -3,6 +3,10 @@
         "port": 8082,
         "host": "0.0.0.0"
     },
+    "jwt": {
+        "expire_hour": 12,
+        "secret": "abc123"
+    },
     "mysql": {
         "database": "cloudfeet",
         "host": "eventest.chebu9wxwjkd.ap-east-1.rds.amazonaws.com",
