@@ -1,12 +1,17 @@
+# install
+
+    git clone repo
+    GO111MODULE=on go mod download
+    go run main.go 
+    
 # cloudfeet api 接口
 
-
->SS配置,域名采集,域名鉴定 
+> SS配置,域名采集,域名鉴定 
 
 ## 获取API访问token
-URI地址: `/api/v1/auth/token`
-请求方法: `POST`
-请求参数: json
+* URI地址 `/api/v1/auth/token`
+* 请求方法 `POST`
+* 请求参数 `json`
 
 ```json
 // 测试阶段随便填
@@ -15,7 +20,8 @@ URI地址: `/api/v1/auth/token`
     "password": "ooxx123" 
 }
 ```
-响应JSON:
+
+* 响应 `json`
 
 ```json
 {
@@ -29,13 +35,16 @@ URI地址: `/api/v1/auth/token`
 
 ## 拉取SS服务器配置
 
-URI地址: `/api/v1/proxy`
-请求方法: `GET`
-请求参数: 
-header:
-    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+* URI地址 `/api/v1/proxy`
+* 请求方法 `GET`
+* 请求参数 无
+* header
 
-响应JSON:
+```json    
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+```    
+
+* 响应 `json`:
 
 ```json
 {
@@ -43,130 +52,122 @@ header:
     "msg": "ok",
     "data": {
         "id": 1,
-        "server":"ss.csdc.io",
+        "server": "ss.csdc.io",
         "port": 7007,
         "method": "chacha20",
-        "password":""
+        "password": "Diveinedu"
     }
 }
 ```
 
-
-
 ## 上传采集到的域名
 
-URI地址:  `/api/v1/pac/domains`
-请求方法: `POST`
-请求json:
-header:
-    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+* URI地址  `/api/v1/pac/domains`
+* 请求方法 `POST`
+* header
 
-```
-{
-	"source": "mac app",
-	"domains": "www.baidu.com,www.google.com,www.facebook.com"
-}
-```
+```json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+```    
 
-响应JSON:
-失败:
+* 请求json:
 
 ```json
 {
-    "code":100,
-    "msg":"失败原因"
+    "source": "mac app",
+    "domains": "www.baidu.com,www.google.com,www.facebook.com"
 }
 ```
 
-成功:
+* 响应 `json`:
 
 ```json
+// 失败
 {
-    "code":200,
-    "msg":""
+    "code": 100,
+    "msg": "失败原因"
+}
+// 成功
+{
+    "code": 200,
+    "msg": ""
 }
 ```
 
-##  拉取尚未判定结果的域名列表
+## 拉取尚未判定结果的域名列表
 
-URI地址: `/api/v1/pac/domains
-请求方法: `GET
-请求参数: 无                                                                                                                               header:
-    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
-                                   
-
-最大拉取1000个域名
-
-响应JSON:
-失败:
+* URI地址 `/api/v1/pac/domains`
+* 请求方法 `GET`
+* header
 
 ```json
-{
-    "code":100,
-    "msg":"no ok"
-    "data":null
-}
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
 ```
 
-成功:
+* 请求参数: 无                                   
+* 响应 `json`
 
 ```json
+// 最大拉取1000个域名
+// 失败
 {
-    "code":200,
-    "msg":"ok"
+    "code": 100,
+    "msg": "no ok"
+    "data": null
+}
+
+// 成功
+{
+    "code": 200,
+    "msg": "ok"
     "data": [
       "www.baidu.com",
       "www.google.com"
     ],
-	"limit": 1000
+    "limit": 1000
 }
 ```
 
 ## 拉取被屏蔽的域名
 
-URI地址: `/api/v1/pac/domains?status=1
-
-请求参数: 无
-header:
-    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
-
-请求方法：GET
-
-响应JSON:
-失败:
+* URI地址 `/api/v1/pac/domains?status=1`
+* 请求参数 无
+* header
 
 ```json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+```    
+
+* 请求方法 GET
+* 响应 `json`
+```json
+// 失败
 {
-    "code":100,
-    "msg":"no ok"
-    "data":null
+    "code": 100,
+    "msg": "no ok"
+    "data": null
 }
-```
-
-成功:
-
-```json
+// 成功
 {
-    "code":200,
-    "msg":"ok"
+    "code": 200,
+    "msg": "ok"
     "data": [
       "www.baidu.com",
       "www.google.com"
     ],
-	"limit": 1000
+    "limit": 1000
 }
 ```
 
-
-
 ## 提交判定后的域名结果
 
-URI地址: `/api/v1/checker/domains
-请求方法: `PUT`
-header:
-    token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
-
-请求JSON:
+* URI地址 `/api/v1/pac/domains`
+* 请求方法 `PUT`
+* header
+```json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+```
+* 请求 `json`
 
 ```json
 {
@@ -178,14 +179,11 @@ header:
     }
 }
 ```
-
-
-响应JSON:
-成功/失败:
-
+* 响应 `json`
 ```json
+// 成功/失败:
 {
     "code": 200/100,
-    "msg":""
+    "msg": ""
 }
 ```
