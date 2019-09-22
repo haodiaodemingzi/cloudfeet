@@ -1,11 +1,8 @@
 {
     "gin": {
         "port": 8082,
-        "host": "0.0.0.0"
-    },
-    "jwt": {
-        "expire_hour": 12,
-        "secret": "abc123"
+        "host": "0.0.0.0",
+        "base_url": "http://rancher.honch123.com:8082/api/v1/"
     },
     "mysql": {
         "database": "cloudfeet",

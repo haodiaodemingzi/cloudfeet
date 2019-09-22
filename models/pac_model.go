@@ -103,7 +103,7 @@ func (p *Pac) UpdateCheckedDomain(data *map[string]interface{}) error {
 
 	var sql = "update pac set status=? where domain=?"
 	tx, err := db.Begin()
-	if err !=nil{
+	if err != nil {
 		panic(err.Error())
 	}
 
@@ -114,7 +114,7 @@ func (p *Pac) UpdateCheckedDomain(data *map[string]interface{}) error {
 	defer stmt.Close()
 
 	var domainMap = *data
-	for k, v := range domainMap{
+	for k, v := range domainMap {
 		// k = domain v = status
 		stmt.Exec(v, fmt.Sprintf("%v", k))
 	}
@@ -142,12 +142,11 @@ func (p *Pac) Query(where map[string]interface{}) ([]Pac, error) {
 	}
 	logger.Info(sql)
 	ns, _ := db.PrepareNamed(sql)
-	defer ns.Close()
 	rows, _ := ns.Queryx(where)
-	pacList := []Pac{}
+	var pacList []Pac
 	for rows.Next() {
 		var pacItem = Pac{}
-		rows.StructScan(&pacItem)
+		_ = rows.StructScan(&pacItem)
 		fmt.Println(pacItem)
 		pacList = append(pacList, pacItem)
 	}

@@ -4,13 +4,14 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/haodiaodemingzi/cloudfeet/middlewares"
 	"github.com/haodiaodemingzi/cloudfeet/routers/api/v1/auth"
 	"github.com/haodiaodemingzi/cloudfeet/routers/api/v1/config"
 	"github.com/haodiaodemingzi/cloudfeet/routers/api/v1/pac"
 	"github.com/haodiaodemingzi/cloudfeet/routers/api/v1/proxy"
-	"github.com/sirupsen/logrus"
-	ginSwagger "github.com/swaggo/gin-swagger"
 
 	//"github.com/swaggo/gin-swagger/swaggerFiles"
 	swaggerFiles "github.com/swaggo/files"
@@ -39,9 +40,15 @@ func InitRouter() *gin.Engine {
 	api.GET("/proxy", proxy.GetProxy)
 
 	// pac api maps
-	api.POST("/pac/domains", pac.UploadDomain)
-	api.GET("/pac/domains", pac.PullDomain)
+	api.POST("/pac/domains", pac.UploadDomains)
+
+	api.GET("/pac/domains", pac.PullDomains)
 	api.PUT("/pac/domains", pac.UpdateDomains)
+	api.POST("/pac/domains/file", pac.UploadDomainFile)
+
+	// api for box
+	api.GET("/pac/script", pac.DownloadBoxScript)
+	api.GET("/pac/config", pac.DownloadBoxConfig)
 
 	return r
 }

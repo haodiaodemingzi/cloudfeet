@@ -1,6 +1,7 @@
 package files
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"mime/multipart"
@@ -85,7 +86,7 @@ func MustOpen(fileName, filePath string) (*os.File, error) {
 
 	f, err := Open(src+fileName, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
-		return nil, fmt.Errorf("Fail to OpenFile :%v", err)
+		return nil, errors.New("fail to open file " + fileName)
 	}
 
 	return f, nil

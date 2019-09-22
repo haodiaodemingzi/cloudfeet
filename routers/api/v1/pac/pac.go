@@ -1,10 +1,15 @@
 package pac
 
 import (
+	"bufio"
+	"bytes"
+	"io"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/haodiaodemingzi/cloudfeet/common/e"
 	"github.com/haodiaodemingzi/cloudfeet/common/logging"
 	"github.com/haodiaodemingzi/cloudfeet/services/pac_service"
@@ -20,8 +25,8 @@ type DomainInfo struct {
 }
 
 // CheckedDomain 检测完成之后提交的域名信息
-type CheckedDomain struct{
-	Source string
+type CheckedDomain struct {
+	Source  string
 	Domains map[string]interface{}
 }
 
@@ -30,7 +35,7 @@ type CheckedDomain struct{
 // @Success 200 {object} response.Template
 // @Failure 500 {object} response.Template
 // @Router /api/v1/pac/domains [post]
-func UploadDomain(c *gin.Context) {
+func UploadDomains(c *gin.Context) {
 	var domainInfo DomainInfo
 	err := c.BindJSON(&domainInfo)
 	if err != nil {
@@ -38,9 +43,9 @@ func UploadDomain(c *gin.Context) {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
-	err = pac_service.SavePacDomain(domainInfo.Source, domainInfo.Domains)
+	err = pac_service.SavePacDomain(domainInfo.Source, &domainInfo.Domains)
 
-	if err !=nil {
+	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
@@ -52,7 +57,7 @@ func UploadDomain(c *gin.Context) {
 // @Success 200 {object} response.Template
 // @Failure 500 {object} response.Template
 // @Router /api/v1/pac/domains [get]
-func PullDomain(c *gin.Context) {
+func PullDomains(c *gin.Context) {
 	status, _ := strconv.Atoi(c.DefaultQuery("status", "0"))
 	limit := c.DefaultQuery("limit", "1000")
 
@@ -85,9 +90,66 @@ func UpdateDomains(c *gin.Context) {
 	}
 	err = pac_service.RefreshCheckedDomain(&checkedDomain.Domains)
 
-	if err != nil{
+	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
 	res.Response(c, http.StatusOK, e.SUCCESS, nil)
+}
+
+// UploadDomains ...
+func UploadDomainFile(c *gin.Context) {
+	file, _, err := c.Request.FormFile("file")
+	if err != nil {
+		logger.Fatal(err)
+		res.Response(c, http.StatusOK, e.ERROR, nil)
+		return
+	}
+	var buf bytes.Buffer
+
+	_, err = io.Copy(&buf, file)
+	if err != nil {
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+	content := buf.String()
+	scanner := bufio.NewScanner(strings.NewReader(content))
+	var domainList []string
+	for scanner.Scan() {
+		if line := scanner.Text(); len(line) > 0 {
+			domainList = append(domainList, line)
+		}
+	}
+	domains := strings.Join(domainList, ",")
+	err = pac_service.SavePacDomain("box", &domains)
+	if err != nil {
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+
+	res.Response(c, http.StatusOK, e.SUCCESS, nil)
+}
+
+// 下载盒子pac文件
+func DownloadBoxConfig(c *gin.Context) {
+	// status = 1 被屏蔽的域名状态
+	domainLines, err := pac_service.GenBoxConfig()
+	if err != nil {
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+
+	c.String(http.StatusOK, domainLines)
+}
+
+// 下载盒子启动脚本
+func DownloadBoxScript(c *gin.Context) {
+	// status = 1 被屏蔽的域名状态
+	content, err := pac_service.GetBoxStartScript()
+	if err != nil {
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+
+	c.String(http.StatusOK, content)
 }

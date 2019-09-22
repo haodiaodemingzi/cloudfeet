@@ -5,75 +5,63 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
 	"github.com/spf13/viper"
+
+	"github.com/haodiaodemingzi/cloudfeet/common/logging"
 )
 
 // Config struct
 type ConfModel struct {
-	PrefixUrl       string `json:"prefix_url"`
-	PageSize        int    `json:"page_size"`
-	JwtSecret       string `json:"jwt_secret"`
-	RuntimeRootPath string
-	ImageSavePath   string
-	ImageMaxSize    int
-	ImageAllowExts  []string
-	LogSavePath     string
-	LogSaveName     string
-	Root            Root    `json:"root"`
-	CORS            CORS    `json:"cors"`
-	MySQL           MySQL   `json:"mysql"`
-	Redis           Redis   `json:"redis"`
-	Outline         Outline `json:"outline"`
-	Log             Log     `json:"log"`
-	Gin             Gin     `Gin:"gin"`
-	Jwt             Jwt     `Jwt:"jwt"`
+	MySQL MySQL
+	Log   Log
+	Gin   Gin
 }
 
 // Log config
 type Log struct {
-	Level  string `json:"level"`
-	Format string `json:"format"`
-	Path   string `json:"path"`
+	Level  string
+	Format string
+	Path   string
 }
 
 type Outline struct {
-	Server string `json:"server"`
-	Port   string `json:"port"`
-	ApiKey string `json:"api_key"`
+	Server string
+	Port   string
+	ApiKey string `mapstructure:"api_key"`
 }
 
 // Root config
 type Root struct {
-	UserName string `json:"user_name"`
-	Password string `json:"password"`
-	RealName string `json:"real_name"`
+	UserName string `mapstructure:"user_name"`
+	Password string
+	RealName string `mapstructure:"real_name"`
 }
 
 // CORS config
 type CORS struct {
-	Enable           bool     `json:"enable"`
-	AllowOrigins     []string `json:"allow_origins"`
-	AllowMethods     []string `json:"allow_methods"`
-	AllowHeaders     []string `json:"allow_headers"`
-	AllowCredentials bool     `json:"allow_credentials"`
-	MaxAge           int      `json:"max_age"`
+	Enable           bool
+	AllowOrigins     []string `mapstructure:"allow_origins"`
+	AllowMethods     []string `mapstructure:"allow_methods"`
+	AllowHeaders     []string `mapstructure:"allow_headers"`
+	AllowCredentials bool     `mapstructure:"allow_credentials"`
+	MaxAge           int      `mapstructure:"max_age"`
 }
 
 // MySQL config
 type MySQL struct {
-	Host     string `json:"host"`
-	Port     int    `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	DataBase string `json:"database"`
+	Host     string
+	Port     int
+	User     string
+	Password string
+	DataBase string
 }
 
 // Gin config
 type Gin struct {
-	Host    string `json:"host"`
-	Port    int    `json:"port"`
-	RunMode string `json:"run_mode"`
+	Host    string
+	Port    int
+	RunMode string
+	BaseURL string `mapstructure:"base_url"`
 }
 
 // Redis config
@@ -88,11 +76,10 @@ type Redis struct {
 
 // Jwt config
 type Jwt struct {
-	Secret     string `json:"secret"`
-	ExpireHour int64  `json:"expire_hour"`
+	Secret     string
+	ExpireHour int64 `mapstructure:"expire_hour"`
 }
 
-var RedisConfig = &Redis{}
 var Viper = viper.New()
 var Config ConfModel
 
@@ -114,6 +101,9 @@ func Setup() {
 		panic(err)
 	}
 	conf := ConfModel{}
-	Viper.Unmarshal(&conf)
+	err = Viper.Unmarshal(&conf)
+	if err != nil {
+		panic(err.Error())
+	}
 	Config = conf
 }
