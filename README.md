@@ -187,3 +187,29 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dv
     "msg": ""
 }
 ```
+## 拉取flash服务器gfwlist配置
+
+* URI地址 `/api/v1/pac/config`
+* 请求方法 `GET`
+* 请求参数 无
+* header
+
+```json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+```
+
+* 响应 `text`:
+
+## 拉取盒子启动脚本
+
+* URI地址 `/api/v1/pac/script`
+* 请求方法 `GET`
+* 请求参数 无
+* header
+
+```json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dvcmQiOiJqYW1lczEyMyIsImV4cCI6MTU2Nzc3MDk2NSwiaXNzIjoiZ2luLWJsb2cifQ.VB1PVKTcwQ9V43SOt3BuVQCiDGhNj036G3k4_mJrWMo
+```
+
+* 响应 `text`:
+

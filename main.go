@@ -26,5 +26,5 @@ func main() {
 	endPoint := fmt.Sprintf("%s:%d", settings.Config.Gin.Host, settings.Config.Gin.Port)
 	logging.Info("Start cloudfeet-config web service with endpoint: %s", endPoint)
 
-	r.Run(endPoint)
+	_ = r.Run(endPoint)
 }

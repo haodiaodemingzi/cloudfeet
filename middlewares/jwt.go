@@ -5,13 +5,13 @@ import (
 	"strings"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+
 	"github.com/haodiaodemingzi/cloudfeet/common/logging"
-	"github.com/haodiaodemingzi/cloudfeet/common/settings"
 )
 
-var jwtSecret = []byte(settings.Config.Jwt.Secret)
+var jwtSecret = []byte("cloudfeet-jwt-token")
 var logger = logging.GetLogger()
 
 // Claims ...
@@ -24,7 +24,8 @@ type Claims struct {
 // GenerateToken ...
 func GenerateToken(username string, password string) (string, error) {
 	now := time.Now()
-	expireTime := now.Add(time.Hour * time.Duration(settings.Config.Jwt.ExpireHour))
+	// expireTime := now.Add(time.Hour * time.Duration(settings.Config.Jwt.ExpireHour))
+	expireTime := now.Add(time.Hour * 3)
 
 	claims := &Claims{
 		username,
@@ -71,6 +72,7 @@ func JwtMiddleware() gin.HandlerFunc {
 		logger.Info("get req token = ", token)
 		_, err := ParseToken(token)
 		if err != nil {
+			logger.Debug(err.Error())
 			c.JSON(http.StatusUnauthorized,
 				gin.H{"code": 400, "msg": "auth failed with token or token expired", "data": nil})
 			c.Abort()

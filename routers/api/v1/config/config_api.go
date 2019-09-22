@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/haodiaodemingzi/cloudfeet/common/e"
-	"github.com/haodiaodemingzi/cloudfeet/common/gmysql"
 	"github.com/haodiaodemingzi/cloudfeet/common/logging"
 	"github.com/haodiaodemingzi/cloudfeet/common/settings"
 
@@ -30,10 +30,5 @@ func GetConfig(c *gin.Context) {
 // @Failure 500 {object} response.Template
 // @Router /api/v1/config/mysql [get]
 func QueryUser(c *gin.Context) {
-	cond := make(map[string]interface{})
-	cond["username"] = "jinyiming"
-	userModel := &gmysql.User{}
-	ret, _ := userModel.GetOne(cond)
-	logger.Info("api res ", ret)
-	res.Response(c, http.StatusOK, e.SUCCESS, ret)
+	res.Response(c, http.StatusOK, e.SUCCESS, nil)
 }
