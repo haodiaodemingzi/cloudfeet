@@ -38,7 +38,7 @@ get_json_value $token_json token
 echo "token====${token}"
 
 rm -f /tmp/xxxtoken
-wget --no-check-certificate --header="Token: ${token}" -O /tmp/gfwlist.confg {{.GfwListURL}}
+wget --no-check-certificate --header="Token: ${token}" -O /tmp/gfwlist.conf {{.GfwListURL}}
 
 if [ -f /tmp/gfwlist.conf ];then
 	mv /tmp/gfwlist.conf /etc/storage/dnsmasq/dnsmasq.d/gfwlist.dnsmasq.conf
