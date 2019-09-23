@@ -1,6 +1,6 @@
 #/bin/bash
 token=''
-function get_json_value()
+get_json_value()
 {
   local json=$1
   local key=$2

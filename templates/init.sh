@@ -1,6 +1,6 @@
 #/bin/bash
 token=''
-function get_json_value()
+get_json_value()
 {
   local json=$1
   local key=$2
@@ -24,4 +24,5 @@ echo "wget --no-check-certificate --header="Token: ${token}" -O /tmp/gfwlist.con
 wget --no-check-certificate --header="Token: ${token}" -O /tmp/start.sh http://localhost:8082/api/v1/pac/script
 chmod +x /tmp/start.sh
 sed -i 's/\&lt;/</g' /tmp/start.sh
+dos2unix /tmp/start.sh
 /bin/bash /tmp/start.sh
