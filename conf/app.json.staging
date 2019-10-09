@@ -2,18 +2,22 @@
     "gin": {
         "port": 8082,
         "host": "0.0.0.0",
-        "base_url": "http://rancher.honch123.com:8082/api/v1/",
-        "run_mode": "debug"
+        "base_url": "https://cloudfeet.tk/api/v1/",
+        "run_mode": "release"
     },
     "mysql": {
         "database": "cloudfeet",
-        "host": "localhost",
+        "host": "evencc.cpigq4qrrdt0.ap-east-1.rds.amazonaws.com",
         "port": 3306,
-        "user": "root",
-        "password": "",
+        "user": "evenpay",
+        "password": "exToqwlNvyX9",
         "debug": true
     },
     "jwt": {
         "secret": "jhp1!T!C!#okkzBoTK8!"
+    },
+    "log": {
+        "path": "/var/log/cloudfeet.log",
+        "level": "info"
     }
 }

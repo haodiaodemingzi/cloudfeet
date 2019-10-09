@@ -4,47 +4,63 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	easy "github.com/t-tomalak/logrus-easy-formatter"
+
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 )
 
-type Log struct {
-	Logger *logrus.Logger
-}
+var logger logrus.Logger
 
-func GetLogger() *Log {
-	log := &Log{
-		Logger: &logrus.Logger{
-			Out:   os.Stdout,
-			Level: logrus.DebugLevel,
-			Formatter: &easy.Formatter{
-				TimestampFormat: "2006-01-02 15:04:05",
-				LogFormat:       "[%lvl%]: %time% - %msg%\n",
-			},
-		},
+func Setup() {
+	levelMaps := map[string]logrus.Level{
+		"debug": logrus.DebugLevel, "info": logrus.InfoLevel, "warn": logrus.WarnLevel,
+		"error": logrus.ErrorLevel, "panic": logrus.PanicLevel,
 	}
-	return log
+	var level logrus.Level
+	level, ok := levelMaps[settings.Config.Log.Level]
+	if !ok {
+		level = logrus.DebugLevel
+	}
+
+	logfile := settings.Config.Log.Path
+	file, err := os.OpenFile(logfile, os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil{
+		panic(err)
+	}
+
+	logger = logrus.Logger{
+		Out:          file,
+		Formatter:    &logrus.JSONFormatter{},
+		ReportCaller: false,
+		Level:        level,
+	}
+	logger.SetOutput(os.Stdout)
 }
 
-func (log *Log) Info(s string, v ...interface{}) {
-	log.Logger.Infof(s, v...)
+func Test(msg string){
+	logger.Debug(msg)
 }
 
-func (log *Log) Debug(s string, v ...interface{}) {
-	log.Logger.Debugf(s, v...)
+func Info(s string, v ...interface{}) {
+	logger.Infof(s, v...)
 }
 
-func (log *Log) Warn(s string, v ...interface{}) {
-	log.Logger.Warnf(s, v...)
+func Debug(s string, v ...interface{}) {
+	logger.Debugf(s, v...)
 }
 
-func (log *Log) Fatal(s string, v ...interface{}) {
-	log.Logger.Fatalf(s, v...)
+func Warn(s string, v ...interface{}) {
+	logger.Warnf(s, v...)
 }
 
-func (log *Log) Error(s string, v ...interface{}) {
-	log.Logger.Errorf(s, v...)
+func Fatal(s string, v ...interface{}) {
+	logger.Fatalf(s, v...)
 }
 
-func (log *Log) Panic(s string, v ...interface{}) {
-	log.Logger.Panicf(s, v...)
+func Error(s string, v ...interface{}) {
+	logger.Errorf(s, v...)
 }
+
+func Panic(s string, v ...interface{}) {
+	logger.Panicf(s, v...)
+}
+

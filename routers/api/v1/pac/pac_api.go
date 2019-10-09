@@ -9,16 +9,14 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/prometheus/common/log"
 
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	"github.com/haodiaodemingzi/cloudfeet/services/pac_service"
 
 	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
 )
 
-var logger = logging.GetLogger()
 
 type DomainInfo struct {
 	Source  string `json:"source"`
@@ -40,7 +38,7 @@ func UploadDomains(c *gin.Context) {
 	var domainInfo DomainInfo
 	err := c.BindJSON(&domainInfo)
 	if err != nil {
-		logger.Error("post upload domain json data error", domainInfo)
+		log.Error("post upload domain json data error", domainInfo)
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
@@ -76,7 +74,7 @@ func PullDomains(c *gin.Context) {
 		"status": status,
 	}
 
-	logger.Info("map data item = ", data)
+	log.Info("map data item = ", data)
 	domainList := []string{}
 	pacList, err := pac_service.GetDomains(data)
 
@@ -86,6 +84,7 @@ func PullDomains(c *gin.Context) {
 	}
 
 	for _, pac := range *pacList {
+		log.Debug("pac model: %+v", pac)
 		domainList = append(domainList, pac.Domain)
 	}
 	res.Response(c, http.StatusOK, e.SUCCESS, domainList)
@@ -100,7 +99,7 @@ func UpdateDomains(c *gin.Context) {
 	var checkedDomain CheckedDomain
 	err := c.BindJSON(&checkedDomain)
 	if err != nil {
-		logger.Error("put json data error", checkedDomain)
+		log.Error("put json data error", checkedDomain)
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
@@ -116,7 +115,7 @@ func UpdateDomains(c *gin.Context) {
 func UploadDomainFile(c *gin.Context) {
 	file, _, err := c.Request.FormFile("file")
 	if err != nil {
-		logger.Fatal(err.Error())
+		log.Fatal(err.Error())
 		res.Response(c, http.StatusOK, e.ERROR, nil)
 		return
 	}
@@ -162,7 +161,7 @@ func DownloadBoxScript(c *gin.Context) {
 	// status = 1 被屏蔽的域名状态
 	content, err := pac_service.GetBoxStartScript()
 	if err != nil {
-		log.Error(err)
+		log.Error(err.Error())
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}

@@ -15,5 +15,9 @@
     },
     "jwt": {
         "secret": "jhp1!T!C!#okkzBoTK8!"
+    },
+    "log": {
+        "path": "/tmp/cloudfeet.log",
+        "level": "debug"
     }
 }

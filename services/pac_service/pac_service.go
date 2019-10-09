@@ -6,12 +6,10 @@ import (
 	"time"
 
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
-
-var log = logging.GetLogger()
 
 type Pac struct {
 	ID         int       `db:"id"`

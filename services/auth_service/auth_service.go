@@ -2,10 +2,9 @@ package auth_service
 
 import (
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 )
 
-var log = logging.GetLogger()
 
 func ValidateUser(username string, password string) bool {
 	var userModel models.UserModel

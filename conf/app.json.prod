@@ -2,7 +2,7 @@
     "gin": {
         "port": 8082,
         "host": "0.0.0.0",
-        "base_url": "https://cloudfeet.vip/api/v1/",
+        "base_url": "https://cloudfeet.tk/api/v1/",
         "run_mode": "release"
     },
     "mysql": {
@@ -15,5 +15,9 @@
     },
     "jwt": {
         "secret": "jhp1!T!C!#okkzBoTK8!"
+    },
+    "log": {
+        "path": "/var/log/cloudfeet.log",
+        "level": "info"
     }
 }

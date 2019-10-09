@@ -6,13 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 
 	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
 )
-
-var logger = logging.GetLogger()
 
 // @Summary Get a single article
 // @Produce  json
