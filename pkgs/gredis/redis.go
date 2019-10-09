@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/haodiaodemingzi/cloudfeet/common/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 )
 
 var RedisConn *redis.Pool

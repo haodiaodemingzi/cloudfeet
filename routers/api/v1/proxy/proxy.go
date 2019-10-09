@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/haodiaodemingzi/cloudfeet/common/e"
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	proxyService "github.com/haodiaodemingzi/cloudfeet/services/proxy_service"
 
-	res "github.com/haodiaodemingzi/cloudfeet/common/http/response"
+	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
 )
 
 var logger = logging.GetLogger()
@@ -19,14 +19,9 @@ var logger = logging.GetLogger()
 // @Failure 500 {object} response.Template
 // @Router /api/v1/config/mysql [get]
 func GetProxy(c *gin.Context) {
-	id := "1"
-	port := "7007"
-	server := "ss.csdc.io"
-	method := "chacha20"
-	connInfo := proxyService.ProxyConnInfo{
-		ID: id, Server: server, Port: port, Method: method,
+	connInfo, err := proxyService.ProxyConnInfo()
+	if err != nil {
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 	}
-	logger.Info("get conn resp ", connInfo)
-
 	res.Response(c, http.StatusOK, e.SUCCESS, connInfo)
 }

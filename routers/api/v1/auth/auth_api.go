@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
 	middleware "github.com/haodiaodemingzi/cloudfeet/middlewares"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 )
 
 var logger = logging.GetLogger()

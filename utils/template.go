@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"path/filepath"
 
-	"github.com/haodiaodemingzi/cloudfeet/common/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 )
 
 var boxScriptTpl string = `

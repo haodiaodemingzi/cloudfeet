@@ -1,0 +1,15 @@
+{
+    "gin": {
+        "port": 8082,
+        "host": "0.0.0.0",
+        "base_url": "https://cloudfeet.vip/api/v1/"
+    },
+    "mysql": {
+        "database": "cloudfeet",
+        "host": "evencc.cpigq4qrrdt0.ap-east-1.rds.amazonaws.com",
+        "port": 3306,
+        "user": "evenpay",
+        "password": "exToqwlNvyX9",
+        "debug": true
+    }
+}

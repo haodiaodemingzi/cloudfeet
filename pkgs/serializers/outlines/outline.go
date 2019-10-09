@@ -3,7 +3,7 @@ package outlines
 import (
 	"fmt"
 
-	"github.com/haodiaodemingzi/cloudfeet/common/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 	"github.com/smallnest/goreq"
 )
 

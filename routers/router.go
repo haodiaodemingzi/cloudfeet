@@ -1,10 +1,8 @@
 package routers
 
 import (
-	"os"
-
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	cors "github.com/rs/cors/wrapper/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/haodiaodemingzi/cloudfeet/middlewares"
@@ -19,14 +17,13 @@ import (
 
 // InitRouter initialize routing information
 func InitRouter() *gin.Engine {
-	// format log
-	var log = logrus.New()
-	log.Out = os.Stdout
 
 	r := gin.New()
 	r.Use(middlewares.JwtMiddleware())
 	r.Use(gin.Recovery())
+	r.Use(cors.Default())
 
+	// swagger 文档
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	api := r.Group("/api/v1")

@@ -6,9 +6,10 @@
     },
     "mysql": {
         "database": "cloudfeet",
-        "host": "eventest.chebu9wxwjkd.ap-east-1.rds.amazonaws.com",
+        "host": "localhost",
         "port": 3306,
-        "user": "evenpay",
-        "password": "evenfintech"
+        "user": "root",
+        "password": "",
+        "debug": true
     }
 }
