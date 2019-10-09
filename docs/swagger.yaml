@@ -1,0 +1,121 @@
+basePath: '{{.BasePath}}'
+definitions:
+  response.Template:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+host: '{{.Host}}'
+info:
+  contact: {}
+  description: An config api
+  license: {}
+  termsOfService: https://github.com/haodiaodemingzi/cloudfeet
+  title: Golang Gin API
+  version: "1.0"
+paths:
+  /api/v1/auth/token:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+      summary: 获取 api token
+  /api/v1/config/{id}:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+      summary: Get a single article
+  /api/v1/config/mysql:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+      summary: Test a mysql conn api
+  /api/v1/pac/domains:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+      summary: 拉取域名
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+      summary: 上传app搜集的域名
+    put:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Template'
+            type: object
+      summary: 更新域名检测信息
+swagger: "2.0"

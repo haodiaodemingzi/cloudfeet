@@ -2,10 +2,9 @@ package proxy_service
 
 import (
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 )
 
-var log = logging.GetLogger()
 
 // 随机获取代理链接信息
 // TODO: 后期智能根据负载和网络状况返回

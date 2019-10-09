@@ -4,14 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	proxyService "github.com/haodiaodemingzi/cloudfeet/services/proxy_service"
 
 	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
 )
 
-var logger = logging.GetLogger()
 
 // @Summary Test a mysql conn api
 // @Produce  json
@@ -20,6 +20,7 @@ var logger = logging.GetLogger()
 // @Router /api/v1/config/mysql [get]
 func GetProxy(c *gin.Context) {
 	connInfo, err := proxyService.ProxyConnInfo()
+	log.Info("ss配置: %+v", connInfo)
 	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 	}

@@ -8,11 +8,10 @@ import (
 	middleware "github.com/haodiaodemingzi/cloudfeet/middlewares"
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
 	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	auth "github.com/haodiaodemingzi/cloudfeet/services/auth_service"
 )
 
-var log = logging.GetLogger()
 
 type LoginInfo struct {
 	Username string `json:"username"`

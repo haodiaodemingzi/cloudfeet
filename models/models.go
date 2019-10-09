@@ -7,23 +7,23 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"time"
-
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
 
 var db *gorm.DB
 
+// TODO: updatetime not auto update
 type Model struct {
-	ID         int        `gorm:"primary_key" json:"id"`
-	CreateTime *time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"create_time"`
-	UpdateTime *time.Time `gorm:"default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" json:"update_time"`
+	ID         int             `gorm:"primary_key" json:"id"`
+	CreateTime utils.LocalTime `gorm:"default:CURRENT_TIMESTAMP" json:"create_time"`
+	UpdateTime utils.LocalTime `gorm:"default:CURRENT_TIMESTAMP" json:"update_time"`
 }
 
 // Setup initializes the database instance
 func Setup() {
 	var err error
-	connStr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
+	connStr := fmt.Sprintf(`%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local`,
 		settings.Config.MySQL.User,
 		settings.Config.MySQL.Password,
 		settings.Config.MySQL.Host,

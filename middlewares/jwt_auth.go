@@ -8,13 +8,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
 
 var jwtSecret = []byte("cloudfeet-jwt-token")
-var logger = logging.GetLogger()
 
 // Claims ...
 type Claims struct {
@@ -41,7 +40,7 @@ func GenerateToken(username string, password string) (string, error) {
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := tokenClaims.SignedString(jwtSecret)
-	logger.Info("gen token ", token)
+	log.Info("gen token ", token)
 
 	return token, err
 }
@@ -55,7 +54,7 @@ func ParseToken(token string) (*Claims, error) {
 		})
 	if tokenClaims != nil {
 		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-			logger.Info("parsed token = ", claims)
+			log.Info("parsed token = ", claims)
 			return claims, nil
 		}
 	}
@@ -76,10 +75,10 @@ func JwtMiddleware() gin.HandlerFunc {
 		}
 
 		token := c.Request.Header.Get("Token")
-		logger.Info("get req token = ", token)
+		log.Info("get req token = ", token)
 		_, err := ParseToken(token)
 		if err != nil {
-			logger.Debug(err.Error())
+			log.Debug(err.Error())
 			c.JSON(http.StatusUnauthorized,
 				gin.H{"code": 400, "msg": "auth failed with token or token expired", "data": nil})
 			c.Abort()

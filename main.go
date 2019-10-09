@@ -11,11 +11,10 @@ import (
 	"github.com/haodiaodemingzi/cloudfeet/routers"
 )
 
-var log = logging.GetLogger()
-
 func init() {
 	settings.Setup()
 	models.Setup()
+	logging.Setup()
 }
 
 // @title Golang Gin API
@@ -23,6 +22,7 @@ func init() {
 // @description An config api
 // @termsOfService https://github.com/haodiaodemingzi/cloudfeet
 func main() {
+	logging.Test("hello logging ====")
 	gin.SetMode(gin.DebugMode)
 
 	r := routers.InitRouter()
