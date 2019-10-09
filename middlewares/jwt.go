@@ -8,7 +8,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 )
 
 var jwtSecret = []byte("cloudfeet-jwt-token")
