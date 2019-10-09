@@ -58,8 +58,8 @@ app_list = {
     'api': { 'port': 8082},
 }
 
-app_file = os.path.join(os.getcwd(),"confg","app.json")
-env_file = os.path.join(os.getcwd(),"confg","app.json." + active)
+app_file = os.path.join(os.getcwd(),"conf","app.json")
+env_file = os.path.join(os.getcwd(),"conf","app.json." + active)
 cp_cmd = "cp -f {profile} {app}".format(profile=env_file, app=app_file)
 print "change profile config -> " + env_file
 
