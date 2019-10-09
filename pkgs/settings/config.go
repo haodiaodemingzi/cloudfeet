@@ -13,6 +13,7 @@ import (
 // Config struct
 type ConfModel struct {
 	MySQL MySQL
+	Jwt   Jwt
 	Log   Log
 	Gin   Gin
 	Debug bool

@@ -28,7 +28,5 @@ func main() {
 	r := routers.InitRouter()
 
 	endPoint := fmt.Sprintf("%s:%d", settings.Config.Gin.Host, settings.Config.Gin.Port)
-	log.Info("Start cloudfeet-config web service with endpoint: %s", endPoint)
-
 	_ = r.Run(endPoint)
 }
