@@ -10,14 +10,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/haodiaodemingzi/cloudfeet/common/e"
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	"github.com/haodiaodemingzi/cloudfeet/services/pac_service"
 
-	res "github.com/haodiaodemingzi/cloudfeet/common/http/response"
+	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
 )
 
-var logger = logging.GetLogger()
 
 type DomainInfo struct {
 	Source  string `json:"source"`
@@ -27,7 +26,7 @@ type DomainInfo struct {
 // CheckedDomain 检测完成之后提交的域名信息
 type CheckedDomain struct {
 	Source  string
-	Domains map[string]interface{}
+	Domains map[string]string
 }
 
 // @Summary 上传app搜集的域名
@@ -39,7 +38,7 @@ func UploadDomains(c *gin.Context) {
 	var domainInfo DomainInfo
 	err := c.BindJSON(&domainInfo)
 	if err != nil {
-		logger.Error("post upload domain json data error", domainInfo)
+		log.Error("post upload domain json data error", domainInfo)
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
@@ -59,20 +58,36 @@ func UploadDomains(c *gin.Context) {
 // @Router /api/v1/pac/domains [get]
 func PullDomains(c *gin.Context) {
 	status, _ := strconv.Atoi(c.DefaultQuery("status", "0"))
-	limit := c.DefaultQuery("limit", "1000")
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "5000"))
+	offset, _ := strconv.Atoi(c.DefaultQuery("offset", "0"))
+
+	if limit > 5000 {
+		log.Error("domain pull max = 5000")
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
 
 	// add check input
 	data := map[string]interface{}{
 		"limit":  limit,
+		"offset": offset,
 		"status": status,
 	}
-	logger.Info("map data item = ", data)
-	domains, err := pac_service.GetDomains(data)
-	if err != nil {
-		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+
+	log.Info("map data item = ", data)
+	domainList := []string{}
+	pacList, err := pac_service.GetDomains(data)
+
+	if pacList == nil || err != nil {
+		res.Response(c, http.StatusOK, e.SUCCESS, domainList)
 		return
 	}
-	res.Response(c, http.StatusOK, e.SUCCESS, domains)
+
+	for _, pac := range *pacList {
+		log.Debug("pac model: %+v", pac)
+		domainList = append(domainList, pac.Domain)
+	}
+	res.Response(c, http.StatusOK, e.SUCCESS, domainList)
 }
 
 // @Summary 更新域名检测信息
@@ -84,12 +99,11 @@ func UpdateDomains(c *gin.Context) {
 	var checkedDomain CheckedDomain
 	err := c.BindJSON(&checkedDomain)
 	if err != nil {
-		logger.Error("put json data error", checkedDomain)
+		log.Error("put json data error", checkedDomain)
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
 	err = pac_service.RefreshCheckedDomain(&checkedDomain.Domains)
-
 	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
@@ -101,7 +115,7 @@ func UpdateDomains(c *gin.Context) {
 func UploadDomainFile(c *gin.Context) {
 	file, _, err := c.Request.FormFile("file")
 	if err != nil {
-		logger.Fatal(err)
+		log.Fatal(err.Error())
 		res.Response(c, http.StatusOK, e.ERROR, nil)
 		return
 	}
@@ -147,6 +161,7 @@ func DownloadBoxScript(c *gin.Context) {
 	// status = 1 被屏蔽的域名状态
 	content, err := pac_service.GetBoxStartScript()
 	if err != nil {
+		log.Error(err.Error())
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}

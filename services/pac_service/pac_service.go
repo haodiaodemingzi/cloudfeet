@@ -1,18 +1,15 @@
 package pac_service
 
 import (
-	"errors"
-	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
-	"github.com/haodiaodemingzi/cloudfeet/common/settings"
-	"github.com/haodiaodemingzi/cloudfeet/common/utils"
 	"github.com/haodiaodemingzi/cloudfeet/models"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
-
-var logger = logging.GetLogger()
 
 type Pac struct {
 	ID         int       `db:"id"`
@@ -26,83 +23,92 @@ type Pac struct {
 
 // SavePacDomain ...
 func SavePacDomain(source string, domains *string) error {
-	var pac = &models.Pac{}
 	var domainList = strings.Split(*domains, ",")
-	var data []map[string]interface{}
+
 	for _, item := range domainList {
-		data = append(data, map[string]interface{}{
-			"domain": item,
-			"status": 0,
-			"source": source,
-		})
+		pac := &models.PacModel{Domain: item, Status: 0, Source: source}
+		if err := pac.FindOrCreate(item); err != nil {
+			return err
+		}
 	}
-	_, err := pac.AddDomains(data)
-	return err
+
+	return nil
 }
 
 // SavePacDomain ...
-func GetDomains(cond map[string]interface{}) ([]string, error) {
-	var pac = &models.Pac{}
-	pacList, err := pac.Query(cond)
+func GetDomains(cond map[string]interface{}) (*[]models.PacModel, error) {
+	// 处理分页查询参数，删除分页参数生成 sql 条件
+	var limits = "limit"
+	var offsets = "offset"
+	var offset = cond[offsets].(int)
+	var limit = cond[limits].(int)
+
+	delete(cond, limits)
+	delete(cond, offsets)
+
+	pacModel := models.PacModel{}
+	pacList, err := pacModel.Query(cond, offset, limit)
+	log.Debug("paclist = %+v", pacList)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, err
 	}
-	var domainList []string
-	for i := 0; i < len(pacList); i++ {
-		domainList = append(domainList, pacList[i].Domain)
-	}
 
-	return domainList, nil
+	return &pacList, nil
 }
 
 // 刷新域名检测
-func RefreshCheckedDomain(data *map[string]interface{}) error {
-	var pac = &models.Pac{}
-	return pac.UpdateCheckedDomain(data)
+func RefreshCheckedDomain(data *map[string]string) error {
+	var pac *models.PacModel
+
+	for k, v := range *data {
+		where := make(map[string]interface{})
+		where["domain"] = k
+		item, _ := pac.Select(where)
+		if item.Domain == "" {
+			continue
+		}
+
+		item.Status, _ = strconv.Atoi(v)
+		item.Edit()
+	}
+	return nil
 }
 
 // 生成盒子配置内nil
 func GenBoxConfig() (string, error) {
-	var domainList []string
+	pacModel := &models.PacModel{}
+	where := make(map[string]interface{})
 
-	var data = make(map[string]interface{})
-	data["limit"] = 900000
-	data["status"] = 1
-	domainList, _ = GetDomains(data)
+	// status = 1 表示被墙的域名
+	// TODO: status 定义常量
+	where["status"] = 1
+	pageNum := 0
+	pageSize := 99999
+	pacList, _ := pacModel.Query(where, pageNum, pageSize)
+
 	var configStr string
-	for _, domain := range domainList {
-		configStr += utils.DomainToGFWConf(utils.ParseTopDomain(domain))
-		logger.Debug("gen pac line ", configStr)
+	for i := 0; i < len(pacList); i++ {
+		configStr += utils.DomainToGFWConf(utils.ParseTopDomain(pacList[i].Domain))
 	}
-	if len(configStr) <= 0 {
-		return "", errors.New("gen pac line failed")
-	}
+	log.Debug("config pac domain config: %+v", configStr)
+
 	return configStr, nil
 }
 
 // 生成盒子配置内nil
 func GetBoxStartScript() (string, error) {
-	// TODO: 从数据库获取可用的ss服务器配置
-	var proxy = &models.Proxy{}
-	var where = map[string]interface{}{
-		"status": 1, "limit": 1,
-	}
-	var proxyList []models.Proxy
-	proxyList, err := proxy.Query(where)
+	var proxyModel = &models.ProxyModel{}
+
+	proxyConfig, err := proxyModel.RandomProxy()
 	if err != nil {
 		return "", err
 	}
-	if len(proxyList) <= 0 {
-		return "", errors.New("没有找到proxy配置")
-	}
-	proxyConfig := proxyList[0]
-
 	gfwlistURL := settings.Config.Gin.BaseURL + `pac/config`
 	authURL := settings.Config.Gin.BaseURL + `auth/token`
-	logger.Debug(settings.Config)
-	logger.Info("获取proxyconfig配置 = ", proxyConfig)
-	logger.Info("api url = ", gfwlistURL)
+
+	log.Info("获取proxyconfig配置 = ", proxyConfig)
+	log.Info("api url = ", gfwlistURL)
+
 	//gfwURL := settings.R
 	content, err := utils.RenderBoxScript(
 		proxyConfig.Server, proxyConfig.Name, proxyConfig.Password, proxyConfig.Port,

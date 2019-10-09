@@ -5,14 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/haodiaodemingzi/cloudfeet/common/e"
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
-	"github.com/haodiaodemingzi/cloudfeet/common/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 
-	res "github.com/haodiaodemingzi/cloudfeet/common/http/response"
+	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
 )
-
-var logger = logging.GetLogger()
 
 // @Summary Get a single article
 // @Produce  json

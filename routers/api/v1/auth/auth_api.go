@@ -4,11 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
+
 	middleware "github.com/haodiaodemingzi/cloudfeet/middlewares"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
+	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	auth "github.com/haodiaodemingzi/cloudfeet/services/auth_service"
 )
 
-var logger = logging.GetLogger()
 
 type LoginInfo struct {
 	Username string `json:"username"`
@@ -23,19 +26,21 @@ type LoginInfo struct {
 func GenToken(c *gin.Context) {
 	var loginInfo LoginInfo
 	err := c.BindJSON(&loginInfo)
-	logger.Info("loginInfo username ", loginInfo.Username)
+	log.Info("login info : %+v", loginInfo)
 
-	// TODO: check user password in db model
-	var msg = ""
+	if !auth.ValidateUser(loginInfo.Username, loginInfo.Password) {
+		log.Error("用户不存在或者用户密码错误")
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
 	token, err := middleware.GenerateToken(loginInfo.Username, loginInfo.Password)
 	if err != nil {
-		logger.Info("get token failed :", err.Error())
-		msg = "生成token失败"
-		c.JSON(400, gin.H{"code": 400, "msg": msg, "data": nil})
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
 	data := make(map[string]interface{})
 	data["token"] = token
+	log.Info("Token: %s", token)
 
-	c.JSON(http.StatusOK, gin.H{"code": 200, "msg": "", "data": data})
+	res.Response(c, http.StatusOK, e.SUCCESS, data)
 }

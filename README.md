@@ -173,9 +173,9 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbWVzIiwicGFzc3dv
 {
     "source": "app",
     "domains": {
-        "google.com": 2,
-        "qq.com":1,
-        "wabac.com": 1
+        "google.com": "2",
+        "qq.com": "1",
+        "wabac.com": "1",
     }
 }
 ```

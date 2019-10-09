@@ -1,20 +1,22 @@
 package settings
 
 import (
+	"fmt"
 	"path"
+	"path/filepath"
 	"runtime"
 	"time"
 
 	"github.com/spf13/viper"
-
-	"github.com/haodiaodemingzi/cloudfeet/common/logging"
 )
 
 // Config struct
 type ConfModel struct {
 	MySQL MySQL
+	Jwt   Jwt
 	Log   Log
 	Gin   Gin
+	Debug bool
 }
 
 // Log config
@@ -54,6 +56,7 @@ type MySQL struct {
 	User     string
 	Password string
 	DataBase string
+	Debug    bool
 }
 
 // Gin config
@@ -87,15 +90,19 @@ var Config ConfModel
 func FindRootDir() string {
 	_, filename, _, _ := runtime.Caller(0)
 	abspath := path.Join(path.Dir(filename), "../..")
-	logging.Info("日志路径: %s", abspath)
 	return abspath
 }
 
 // Setup init all config
 func Setup() {
-	configPath := FindRootDir()
+	root := FindRootDir()
+	configPath := filepath.Join(root, "conf")
+
+	fmt.Println("log path: ", configPath)
+
 	Viper.SetConfigName("app")
 	Viper.AddConfigPath(configPath)
+
 	err := Viper.ReadInConfig()
 	if err != nil {
 		panic(err)

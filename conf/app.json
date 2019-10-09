@@ -1,0 +1,23 @@
+{
+    "gin": {
+        "port": 8082,
+        "host": "0.0.0.0",
+        "base_url": "http://rancher.honch123.com:8082/api/v1/",
+        "run_mode": "debug"
+    },
+    "mysql": {
+        "database": "cloudfeet",
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "",
+        "debug": true
+    },
+    "jwt": {
+        "secret": "jhp1!T!C!#okkzBoTK8!"
+    },
+    "log": {
+        "path": "C:/src/github.com/cloudfeet/xx.log",
+        "level": "debug"
+    }
+}
