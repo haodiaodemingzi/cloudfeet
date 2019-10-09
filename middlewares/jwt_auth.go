@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
 
 var jwtSecret = []byte("cloudfeet-jwt-token")
@@ -25,7 +27,8 @@ type Claims struct {
 func GenerateToken(username string, password string) (string, error) {
 	now := time.Now()
 	// expireTime := now.Add(time.Hour * time.Duration(settings.Config.Jwt.ExpireHour))
-	expireTime := now.Add(time.Hour * 3)
+	expireTime := now.Add(time.Hour * 24)
+	password = utils.EncodeMD5(password + `|` + settings.Config.Jwt.Secret)
 
 	claims := &Claims{
 		username,
@@ -64,6 +67,10 @@ func ParseToken(token string) (*Claims, error) {
 func JwtMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.Request.Method == "POST" && strings.Index(c.Request.URL.Path, "auth") != -1 {
+			c.Next()
+			return
+		}
+		if strings.Index(c.Request.URL.Path, "swagger") != -1 {
 			c.Next()
 			return
 		}

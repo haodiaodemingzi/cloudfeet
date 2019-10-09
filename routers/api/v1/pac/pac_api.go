@@ -79,12 +79,14 @@ func PullDomains(c *gin.Context) {
 	logger.Info("map data item = ", data)
 	domainList := []string{}
 	pacList, err := pac_service.GetDomains(data)
+
+	if pacList == nil || err != nil {
+		res.Response(c, http.StatusOK, e.SUCCESS, domainList)
+		return
+	}
+
 	for _, pac := range *pacList {
 		domainList = append(domainList, pac.Domain)
-	}
-	if err != nil {
-		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
-		return
 	}
 	res.Response(c, http.StatusOK, e.SUCCESS, domainList)
 }
