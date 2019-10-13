@@ -25,6 +25,18 @@ if [ -f /tmp/gfwlist.conf ];then
 	mv /tmp/gfwlist.conf /etc/storage/dnsmasq/dnsmasq.d/gfwlist.dnsmasq.conf
 	echo "" > /etc/storage/dnsmasq/gfwhosts
 fi
+
+report_script="/tmp/reportdns.sh"
+cat > ${report_script} <<EOF
+#/bin/bash
+
+logger "域名缓存分析.."
+CLOUDFEET_TOKEN=\`nvram get CLOUDFEET_TOKEN\`
+wget --no-check-certificate --header="Token: \${CLOUDFEET_TOKEN}" \\
+         --post-data="\`cat /tmp/dns.cache|uniq\`" {{.DomainsUploadURL}}
+EOF
+chmod 755 ${report_script}
+
 ipset_gfw=ss_spec_dst_fw
 
 restart_dnsproxy
