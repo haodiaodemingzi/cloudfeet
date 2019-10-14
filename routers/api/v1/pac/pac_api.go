@@ -135,6 +135,7 @@ func UploadDomainFile(c *gin.Context) {
 		}
 	}
 	domains := strings.Join(domainList, ",")
+	log.Info("解析域名文件结果: %s", domains)
 	err = pac_service.SavePacDomain("box", &domains)
 	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)

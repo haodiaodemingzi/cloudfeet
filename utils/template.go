@@ -49,10 +49,12 @@ type SserverConfig struct {
 	Method     string
 	GfwListURL string
 	AuthURL    string
+	DomainsUploadURL string
 }
 
 func RenderBoxScript(server string, username string,
-	password string, port int, method string, authURL string, gfwlistURL string) (string, error) {
+	password string, port int, method string, authURL string, gfwlistURL string,
+	domainsFileURL string) (string, error) {
 	// t := template.New("box-script")
 	buf := new(bytes.Buffer)
 	rootDir := settings.FindRootDir()
@@ -61,7 +63,7 @@ func RenderBoxScript(server string, username string,
 	ssConfig := SserverConfig{
 		Server: server, UserName: username, Port: port,
 		Password: password, Method: method, GfwListURL: gfwlistURL,
-		AuthURL: authURL,
+		AuthURL: authURL, DomainsUploadURL: domainsFileURL,
 	}
 	err := t.Execute(buf, ssConfig)
 	return buf.String(), err

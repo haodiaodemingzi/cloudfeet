@@ -73,6 +73,14 @@ func JwtMiddleware() gin.HandlerFunc {
 			c.Next()
 			return
 		}
+		if strings.Index(c.Request.URL.Path, "login") != -1 {
+			c.Next()
+			return
+		}
+		if strings.Index(c.Request.URL.Path, "info") != -1 {
+			c.Next()
+			return
+		}
 
 		token := c.Request.Header.Get("Token")
 		log.Info("get req token = ", token)

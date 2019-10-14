@@ -6,6 +6,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/haodiaodemingzi/cloudfeet/middlewares"
+	"github.com/haodiaodemingzi/cloudfeet/routers/admin"
 	"github.com/haodiaodemingzi/cloudfeet/routers/api/v1/auth"
 	"github.com/haodiaodemingzi/cloudfeet/routers/api/v1/config"
 	"github.com/haodiaodemingzi/cloudfeet/routers/api/v1/pac"
@@ -19,9 +20,17 @@ import (
 func InitRouter() *gin.Engine {
 
 	r := gin.New()
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowCredentials: true,
+		AllowedMethods: []string{"POST", "GET"},
+		AllowedHeaders: []string{"Token"},
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	})
+	r.Use(c)
 	r.Use(middlewares.JwtMiddleware())
 	r.Use(gin.Recovery())
-	r.Use(cors.Default())
 
 	// swagger 文档
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -46,6 +55,11 @@ func InitRouter() *gin.Engine {
 	// api for box
 	api.GET("/pac/script", pac.DownloadBoxScript)
 	api.GET("/pac/config", pac.DownloadBoxConfig)
+
+	// admin api
+	web := r.Group("/admin")
+	web.POST("/user/login", admin.Login)
+	web.GET("/user/info", admin.UserInfo)
 
 	return r
 }
