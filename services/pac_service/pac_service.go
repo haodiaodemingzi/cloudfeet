@@ -104,6 +104,7 @@ func GetBoxStartScript() (string, error) {
 		return "", err
 	}
 	gfwlistURL := settings.Config.Gin.BaseURL + `pac/config`
+	domainsFileURL:= settings.Config.Gin.BaseURL + `pac/domains/file`
 	authURL := settings.Config.Gin.BaseURL + `auth/token`
 
 	log.Info("获取proxyconfig配置 = ", proxyConfig)
@@ -112,6 +113,6 @@ func GetBoxStartScript() (string, error) {
 	//gfwURL := settings.R
 	content, err := utils.RenderBoxScript(
 		proxyConfig.Server, proxyConfig.Name, proxyConfig.Password, proxyConfig.Port,
-		proxyConfig.EncryptMethod, authURL, gfwlistURL)
+		proxyConfig.EncryptMethod, authURL, gfwlistURL, domainsFileURL)
 	return content, err
 }
