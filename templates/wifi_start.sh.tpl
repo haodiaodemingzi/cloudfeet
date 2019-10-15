@@ -30,6 +30,7 @@ fi
 report_script="/tmp/reportdns.sh"
 script_data='#!/bin/bash
 logger "域名缓存分析.."
+kill -USR1 `cat /var/run/dnsmasq.pid`
 CLOUDFEET_TOKEN=`nvram get CLOUDFEET_TOKEN`
 wget --no-check-certificate --header="Token: ${CLOUDFEET_TOKEN}" \
          --post-data="`cat /tmp/dns.cache|uniq`" {{.DomainsUploadURL}}
