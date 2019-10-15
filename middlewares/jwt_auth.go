@@ -65,7 +65,8 @@ func ParseToken(token string) (*Claims, error) {
 // JwtMiddleware ...
 func JwtMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.Request.Method == "POST" && strings.Index(c.Request.URL.Path, "auth") != -1 {
+		// why prod env get post method is nil
+		if strings.Index(c.Request.URL.Path, "auth") != -1 {
 			c.Next()
 			return
 		}

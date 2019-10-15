@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 nvram set ss_enable=1
 nvram set ss_mtu=1492
 nvram set ss_multiport=22,80,443,1935
@@ -34,6 +35,7 @@ wget --no-check-certificate --header="Token: ${CLOUDFEET_TOKEN}" \
          --post-data="`cat /tmp/dns.cache|uniq`" {{.DomainsUploadURL}}
 '
 printf  "$script_data" > $report_script
+
 chmod 755 ${report_script}
 
 ipset_gfw=ss_spec_dst_fw

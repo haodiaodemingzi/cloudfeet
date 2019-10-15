@@ -1,0 +1,6 @@
+version: '2'
+services:
+  api:
+    image: registry.cn-hongkong.aliyuncs.com/1024w/cloudfeet-api:release/v1.0.1
+    ports:
+    - 8082:8082
