@@ -54,7 +54,7 @@ func ParseToken(token string) (*Claims, error) {
 		})
 	if tokenClaims != nil {
 		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-			log.Info("parsed token = ", claims)
+			log.Info("parsed token = %+v", claims)
 			return claims, nil
 		}
 	}
@@ -65,11 +65,8 @@ func ParseToken(token string) (*Claims, error) {
 // JwtMiddleware ...
 func JwtMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		log.Info("req url = %s", c.Request.URL.Path)
 		if c.Request.Method == "POST" && strings.Index(c.Request.URL.Path, "auth") != -1 {
-			c.Next()
-			return
-		}
-		if strings.Index(c.Request.URL.Path, "swagger") != -1 {
 			c.Next()
 			return
 		}
@@ -77,13 +74,13 @@ func JwtMiddleware() gin.HandlerFunc {
 			c.Next()
 			return
 		}
-		if strings.Index(c.Request.URL.Path, "info") != -1 {
+		if c.Request.Method == "OPTIONS"{
 			c.Next()
 			return
 		}
 
 		token := c.Request.Header.Get("Token")
-		log.Info("get req token = ", token)
+		log.Info("get req header token = ", token)
 		_, err := ParseToken(token)
 		if err != nil {
 			log.Debug(err.Error())

@@ -1,8 +1,10 @@
 package routers
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
-	cors "github.com/rs/cors/wrapper/gin"
+	cors "github.com/itsjamie/gin-cors"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/haodiaodemingzi/cloudfeet/middlewares"
@@ -20,16 +22,17 @@ import (
 func InitRouter() *gin.Engine {
 
 	r := gin.New()
-	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowCredentials: true,
-		AllowedMethods: []string{"POST", "GET"},
-		AllowedHeaders: []string{"Token"},
-		// Enable Debugging for testing, consider disabling in production
-		Debug: true,
-	})
-	r.Use(c)
 	r.Use(middlewares.JwtMiddleware())
+	// Apply the middleware to the router (works with groups too)
+	r.Use(cors.Middleware(cors.Config{
+		Origins:        "*",
+		Methods:        "GET, PUT, POST, DELETE, OPTIONS",
+		RequestHeaders: "Origin, Authorization, Content-Type, Access-Control-Allow-Origin, Token",
+		ExposedHeaders: "",
+		MaxAge: 50 * time.Second,
+		Credentials: true,
+		ValidateHeaders: false,
+	}))
 	r.Use(gin.Recovery())
 
 	// swagger 文档

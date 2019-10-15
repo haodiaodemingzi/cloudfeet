@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"path/filepath"
 
+	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
 	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
 )
 
@@ -65,6 +66,7 @@ func RenderBoxScript(server string, username string,
 		Password: password, Method: method, GfwListURL: gfwlistURL,
 		AuthURL: authURL, DomainsUploadURL: domainsFileURL,
 	}
+	log.Info("ssconfig : %+v", ssConfig)
 	err := t.Execute(buf, ssConfig)
 	return buf.String(), err
 }
