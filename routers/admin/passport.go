@@ -41,5 +41,21 @@ func Login(c *gin.Context) {
 	res.Response(c, http.StatusOK, e.SUCCESS, data)
 }
 
+func UserInfo(c *gin.Context) {
+	claims, err := middleware.ParseToken(c.Request.Header.Get("Token"))
+	if err != nil {
+		log.Error(err.Error())
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+	userModel := &models.UserModel{}
+	where := map[string]interface{}{
+		"username": claims.Username,
+	}
+	userInfo, _:= userModel.Select(where)
+	res.Response(c, http.StatusOK, e.SUCCESS, userInfo)
+}
+
+
 
 
