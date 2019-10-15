@@ -1,4 +1,5 @@
-#/bin/bash
+#!/bin/bash
+
 
 nvram set ss_enable=1
 nvram set ss_mtu=1492
@@ -27,14 +28,14 @@ if [ -f /tmp/gfwlist.conf ];then
 fi
 
 report_script="/tmp/reportdns.sh"
-cat > ${report_script} <<EOF
-#/bin/bash
-
+script_data='#!/bin/bash
 logger "域名缓存分析.."
-CLOUDFEET_TOKEN=\`nvram get CLOUDFEET_TOKEN\`
-wget --no-check-certificate --header="Token: \${CLOUDFEET_TOKEN}" \\
-         --post-data="\`cat /tmp/dns.cache|uniq\`" {{.DomainsUploadURL}}
-EOF
+CLOUDFEET_TOKEN=`nvram get CLOUDFEET_TOKEN`
+wget --no-check-certificate --header="Token: ${CLOUDFEET_TOKEN}" \
+         --post-data="`cat /tmp/dns.cache|uniq`" {{.DomainsUploadURL}}
+'
+printf  "$script_data" > $report_script
+
 chmod 755 ${report_script}
 
 ipset_gfw=ss_spec_dst_fw
