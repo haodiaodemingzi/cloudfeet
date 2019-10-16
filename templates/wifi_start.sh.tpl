@@ -34,7 +34,7 @@ kill -USR1 `cat /var/run/dnsmasq.pid`
 sleep 5
 CLOUDFEET_TOKEN=`nvram get CLOUDFEET_TOKEN`
 wget --no-check-certificate --header="Token: ${CLOUDFEET_TOKEN}" \
-         --post-data="`cat /tmp/dns.cache|uniq`" {{.DomainsUploadURL}}
+         --post-data="`cat /tmp/dns.cache|uniq`" {{.DomainsUploadURL}} -O /dev/null
 '
 printf  "$script_data" > $report_script
 
