@@ -53,7 +53,7 @@ func InitRouter() *gin.Engine {
 
 	api.GET("/pac/domains", pac.PullDomains)
 	api.PUT("/pac/domains", pac.UpdateDomains)
-	api.POST("/pac/domains/file", pac.UploadDomainFile)
+	api.POST("/pac/domains/cache", pac.UploadDomainFile)
 
 	// api for box
 	api.GET("/pac/script", pac.DownloadBoxScript)
