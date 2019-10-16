@@ -104,7 +104,7 @@ func GetBoxStartScript() (string, error) {
 		return "", err
 	}
 	gfwlistURL := settings.Config.Gin.BaseURL + `pac/config`
-	domainsFileURL:= settings.Config.Gin.BaseURL + `pac/domains/file`
+	domainsFileURL:= settings.Config.Gin.BaseURL + `pac/domains/cache`
 	authURL := settings.Config.Gin.BaseURL + `auth/token`
 
 	log.Info("获取proxyconfig配置 = ", proxyConfig)
