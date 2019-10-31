@@ -1,8 +1,10 @@
 package proxy_service
 
 import (
+	"fmt"
+
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 )
 
 
@@ -16,4 +18,31 @@ func ProxyConnInfo() (models.ProxyModel, error) {
 	}
 
 	return proxyModel, err
+}
+
+func AddProxy(server string, port int, method string, password string) error{
+	var model = &models.ProxyModel{}
+
+	model.Name = fmt.Sprintf("%s-%d", server, port)
+	model.Domain = server
+	model.Server = server
+	model.Port = port
+	model.EncryptMethod = method
+	model.Password = password
+	model.Status = 1
+
+	return model.FindOrCreate(model.Domain)
+}
+
+func RemoveProxy(server string) error{
+	var model = &models.ProxyModel{}
+
+	where := map[string]interface{}{"server": server,}
+	row, err := model.Select(where)
+	if err != nil{
+		return err
+	}
+
+	err = row.Delete()
+	return err
 }

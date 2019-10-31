@@ -2,7 +2,7 @@ package response
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/e"
 )
 
 type API struct {

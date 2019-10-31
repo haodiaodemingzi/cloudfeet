@@ -7,8 +7,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 )
 
 // GetImageFullUrl get the full access path

@@ -5,8 +5,8 @@ import (
 	"html/template"
 	"path/filepath"
 
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 )
 
 var boxScriptTpl string = `

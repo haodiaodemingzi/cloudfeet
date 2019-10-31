@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
 

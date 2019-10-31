@@ -17,6 +17,7 @@ type ConfModel struct {
 	Log   Log
 	Gin   Gin
 	Debug bool
+	URL URL
 }
 
 // Log config
@@ -75,6 +76,17 @@ type Redis struct {
 	MaxIdle     int
 	MaxActive   int
 	IdleTimeout time.Duration
+}
+
+type URL struct {
+	AuthToken string `mapstructure:"auth_token"`
+	PullDomains string `mapstructure:"pull_domains"`
+	UpdateDomains string `mapstructure:"update_domains"`
+	UploadDomains string `mapstructure:"upload_domains"`
+	UploadDNSFile string `mapstructure:"upload_dns_file"`
+	PacConfig string `mapstructure:"pac_config"`
+	InitScript string `mapstructure:"init_script"`
+	ProxyInfo string `mapstructure:"proxy_info"`
 }
 
 // Jwt config

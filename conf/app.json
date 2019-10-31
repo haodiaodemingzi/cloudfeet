@@ -2,7 +2,7 @@
     "gin": {
         "port": 8082,
         "host": "0.0.0.0",
-        "base_url": "http://rancher.honch123.com:8082/api/v1/",
+        "base_url": "http://localhost:8082/api/v1/",
         "run_mode": "debug"
     },
     "mysql": {
@@ -17,7 +17,17 @@
         "secret": "jhp1!T!C!#okkzBoTK8!"
     },
     "log": {
-        "path": "C:/src/github.com/cloudfeet/xx.log",
+        "path": "./cloudfeet.log",
         "level": "debug"
+    },
+    "url": {
+        "auth_token": "/auth/token",
+        "pull_domains": "/pac/domains",
+        "update_domains": "/pac/domains",
+        "upload_domains": "/pac/domains",
+        "upload_dns_file": "/pac/cache",
+        "pac_config": "/pac/config",
+        "init_script": "/pac/script",
+        "proxy_info": "/proxy"
     }
 }

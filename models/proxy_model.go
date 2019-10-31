@@ -4,16 +4,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type ProxyModel struct {
-	Model
-	Server        string `json:"server"`
-	Domain        string `json:"domain"`
-	Port          int    `json:"port"`
-	EncryptMethod string `json:"encrypt_method"`
-	Password      string `json:"password"`
-	Status        int    `json:"status"`
-	Name          string `json:"name"`
-}
 
 func (ProxyModel) TableName() string {
 	return "proxy"

@@ -4,13 +4,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type PacModel struct {
-	Model
-	Domain string `json:"domain"`
-	Region string `json:"region"`
-	Status int    `json:"status"`
-	Source string `json:"source"`
-}
 
 func (PacModel) TableName() string {
 	return "pac"

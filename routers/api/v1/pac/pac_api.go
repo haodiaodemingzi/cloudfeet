@@ -9,11 +9,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/e"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	"github.com/haodiaodemingzi/cloudfeet/services/pac_service"
 
-	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
+	res "github.com/haodiaodemingzi/cloudfeet/pkg/http/response"
 )
 
 
@@ -36,7 +36,7 @@ type CheckedDomain struct {
 func UploadDomains(c *gin.Context) {
 	var domainInfo DomainInfo
 	err := c.BindJSON(&domainInfo)
-	if err != nil {
+	if err != nil || domainInfo.Domains == ""{
 		log.Error("post upload domain json data error", domainInfo)
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return

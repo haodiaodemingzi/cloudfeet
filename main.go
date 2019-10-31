@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 	"github.com/haodiaodemingzi/cloudfeet/routers"
 )
 
@@ -27,5 +27,6 @@ func main() {
 	r := routers.InitRouter()
 
 	endPoint := fmt.Sprintf("%s:%d", settings.Config.Gin.Host, settings.Config.Gin.Port)
+	fmt.Println("hello")
 	_ = r.Run(endPoint)
 }

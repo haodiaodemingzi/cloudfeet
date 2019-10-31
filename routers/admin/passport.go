@@ -7,9 +7,9 @@ import (
 
 	middleware "github.com/haodiaodemingzi/cloudfeet/middlewares"
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/e"
+	res "github.com/haodiaodemingzi/cloudfeet/pkg/http/response"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	auth "github.com/haodiaodemingzi/cloudfeet/services/auth_service"
 )
 
