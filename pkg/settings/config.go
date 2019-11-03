@@ -10,14 +10,15 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Config struct
+// ConfModel ...
 type ConfModel struct {
-	MySQL MySQL
-	Jwt   Jwt
-	Log   Log
-	Gin   Gin
-	Debug bool
-	URL URL
+	MySQL  MySQL
+	Jwt    Jwt
+	Log    Log
+	Gin    Gin
+	Debug  bool
+	URL    URL
+	Consul Consul
 }
 
 // Log config
@@ -27,13 +28,14 @@ type Log struct {
 	Path   string
 }
 
+// Outline ...
 type Outline struct {
 	Server string
 	Port   string
-	ApiKey string `mapstructure:"api_key"`
+	APIKEY string `mapstructure:"api_key"`
 }
 
-// Root config
+// Root ...
 type Root struct {
 	UserName string `mapstructure:"user_name"`
 	Password string
@@ -78,15 +80,16 @@ type Redis struct {
 	IdleTimeout time.Duration
 }
 
+// URL ...
 type URL struct {
-	AuthToken string `mapstructure:"auth_token"`
-	PullDomains string `mapstructure:"pull_domains"`
+	AuthToken     string `mapstructure:"auth_token"`
+	PullDomains   string `mapstructure:"pull_domains"`
 	UpdateDomains string `mapstructure:"update_domains"`
 	UploadDomains string `mapstructure:"upload_domains"`
 	UploadDNSFile string `mapstructure:"upload_dns_file"`
-	PacConfig string `mapstructure:"pac_config"`
-	InitScript string `mapstructure:"init_script"`
-	ProxyInfo string `mapstructure:"proxy_info"`
+	PacConfig     string `mapstructure:"pac_config"`
+	InitScript    string `mapstructure:"init_script"`
+	ProxyInfo     string `mapstructure:"proxy_info"`
 }
 
 // Jwt config
@@ -95,7 +98,17 @@ type Jwt struct {
 	ExpireHour int64 `mapstructure:"expire_hour"`
 }
 
+// Consul model
+type Consul struct {
+	Scheme string `mapstructure:"scheme"`
+	DC     string `mapstructure:"dc"`
+	Addr   string `mapstructure:"addr"`
+}
+
+// Viper config
 var Viper = viper.New()
+
+// Config model
 var Config ConfModel
 
 // FindRootDir find root dir for project

@@ -4,9 +4,9 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/elazarl/goproxy v0.0.0-20190911111923-ecfe977594f1 // indirect
-	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.4.0
 	github.com/gomodule/redigo v2.0.0+incompatible
+	github.com/hashicorp/consul/api v1.2.0
 	github.com/itsjamie/gin-cors v0.0.0-20160420130702-97b4a9da7933
 	github.com/jinzhu/gorm v1.9.11
 	github.com/moul/http2curl v1.0.0 // indirect
@@ -21,3 +21,5 @@ require (
 	github.com/yinqiwen/gsnova v0.30.0
 	golang.org/x/net v0.0.0-20190611141213-3f473d35a33a
 )
+
+go 1.13
