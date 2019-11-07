@@ -1,23 +1,1 @@
-package main
-
-import "fmt"
-
-type Person struct {
-	Name string
-	Age  int
-	Action func(int) int
-}
-
-func Get(){
-	fmt.Println("get")
-}
-
-func main() {
-	p := Person{Name:"james", Age: 13, Action: func(i int) int{
-		return 3
-	}}
-	action := p.Action(3)
-	fmt.Println("action = ", action)
-}
-
-
+package mainimport (	"fmt"	"log"	"math/rand")import "github.com/hashicorp/consul/api"type Person struct {	Name string	Age  int	Action func(int) int}func Get(){	fmt.Println("get")}func makeClient() *api.Client{	config := &api.Config{Address:"52.81.61.169:8500", Scheme: "http", Datacenter: "dc1"}	client, _ := api.NewClient(config)	return client}func regProxy(c *api.Client, name string, id string, address string, tags []string, port int){	reg := &api.AgentServiceRegistration{		Name: name,		ID: id,		Address: address,		Tags: tags,		Port: port,		Weights: &api.AgentWeights{			Passing: 10,			Warning: 1,		},		Check: &api.AgentServiceCheck{			Interval: "30s",			Timeout: "5s",			TCP: fmt.Sprintf("%s:%s", address, port),		},	}	if err := c.Agent().ServiceRegister(reg); err != nil {		log.Fatal("register service failed " + id)	}}func main() {	c := makeClient()	regProxy(c, "outline-ss-server", "ss-1", "prom2.switfin.org", []string{"outline"}, 9000)	regProxy(c, "outline-ss-server", "ss-2", "prom1.switfin.org", []string{"outline"}, 9000)	service, got, err:= c.Agent().Service("ss-1", nil)	log.Printf("get by agent service -> %+v", service)	log.Printf("get by agent service got -> %+v", got)	log.Println(err)	//service, got, err = c.Agent().AgentHealthServiceByID("ss-1", nil)	s, outs, err := c.Agent().AgentHealthServiceByID("ss-1")	log.Printf("checker info -> %+v", outs)	log.Printf("checker string info -> %+v", s)	_, checkList, err := c.Agent().AgentHealthServiceByName("outline-ss-server")	randChecker := checkList[rand.Intn(len(checkList))]	log.Printf("rand service check service -> %+v", randChecker.Service)}
