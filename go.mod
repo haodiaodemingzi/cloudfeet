@@ -5,6 +5,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/elazarl/goproxy v0.0.0-20190911111923-ecfe977594f1 // indirect
 	github.com/gin-gonic/gin v1.4.0
+	github.com/go-resty/resty/v2 v2.1.0
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/hashicorp/consul/api v1.2.0
 	github.com/itsjamie/gin-cors v0.0.0-20160420130702-97b4a9da7933
@@ -19,7 +20,7 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.5.1
 	github.com/yinqiwen/gsnova v0.30.0
-	golang.org/x/net v0.0.0-20190611141213-3f473d35a33a
+	golang.org/x/net v0.0.0-20190628185345-da137c7871d7
 )
 
 go 1.13

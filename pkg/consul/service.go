@@ -31,7 +31,7 @@ func GetService(serviceID string) (*api.AgentService, error) {
 }
 
 // GetServices ...
-func GetServices(map[string]*api.AgentService, error) (map[string]*api.AgentService, err){
+func GetServices(map[string]*api.AgentService, error) (map[string]*api.AgentService, error){
 	services, err := ConsulConn.Agent().Services()
 	if err != nil {
 		log.Fatal("Get service list error :" + err.Error())
@@ -40,7 +40,7 @@ func GetServices(map[string]*api.AgentService, error) (map[string]*api.AgentServ
 }
 
 // TODO: set constant in module
-func RegisterProxyNode(server string, port int, provider string, region string) err{
+func RegisterProxyNode(server string, port int, provider string, region string) error{
 	serviceId := "outline-" + server
 	serviceName := "outline-proxy"
 	reg := makeServiceReg(serviceId, serviceName, []string{"proxy", "v1"}, server, port)
@@ -51,12 +51,15 @@ func RegisterProxyNode(server string, port int, provider string, region string) 
 	reg.Check = &api.AgentServiceCheck{
 		Interval: "120s",
 		Timeout: "5s",
-		TCP: fmt.Sprintf("%s:%s", server, port),
+		TCP: fmt.Sprintf("%s:%d", server, port),
 		DeregisterCriticalServiceAfter: "90m",
 	}
 
 	// make service
 	err := ConsulConn.Agent().ServiceRegister(&reg)
+	if err != nil{
+		panic(err)
+	}
 	return err
 }
 
@@ -76,7 +79,7 @@ func makeServiceReg(
 
 // DeRegisterService ...
 func DeRegisterService(serviceID string) error {
-	return ConsulConn.agent.ServiceDeregister(serviceID)
+	return ConsulConn.Agent().ServiceDeregister(serviceID)
 }
 
 func GetHealthServices(serviceName string) ([]api.AgentServiceChecksInfo, error){

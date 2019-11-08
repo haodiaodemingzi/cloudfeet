@@ -90,6 +90,7 @@ type URL struct {
 	PacConfig     string `mapstructure:"pac_config"`
 	InitScript    string `mapstructure:"init_script"`
 	ProxyInfo     string `mapstructure:"proxy_info"`
+	Node          string `mapstructure:"node"`
 }
 
 // Jwt config

@@ -1,9 +1,13 @@
 package proxy_service
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/go-resty/resty/v2"
+
 	"github.com/haodiaodemingzi/cloudfeet/models"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/consul"
 	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 )
 
@@ -32,6 +36,26 @@ func AddProxy(server string, port int, method string, password string) error{
 	model.Status = 1
 
 	return model.FindOrCreate(model.Domain)
+}
+
+func AddOutlineProxy() (map[string]interface{},error){
+	nodeService, err:= consul.GetRandomProxyService("outline-proxy")
+	if err != nil{
+		log.Error(err.Error())
+		return nil, err
+	}
+	// with auth api key
+	apiKEY := "api"
+	outlineAPI := fmt.Sprintf("https://%s:%d/%s/access-key",
+		nodeService.Address, nodeService.Port, apiKEY)
+	client := resty.New()
+	// read from setting
+	body := map[string]interface{}{"username": "testuser", "password": "Diveinedu",}
+	resp, err := client.R().SetBody(body).Post(outlineAPI)
+	if resp.StatusCode() != 201{
+		return nil, errors.New("post new access-key failed")
+	}
+	return body, nil
 }
 
 func RemoveProxy(server string) error{

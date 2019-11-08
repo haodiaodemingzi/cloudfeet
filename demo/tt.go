@@ -1,1 +1,29 @@
-package mainimport (	"fmt"	"log"	"math/rand")import "github.com/hashicorp/consul/api"type Person struct {	Name string	Age  int	Action func(int) int}func Get(){	fmt.Println("get")}func makeClient() *api.Client{	config := &api.Config{Address:"52.81.61.169:8500", Scheme: "http", Datacenter: "dc1"}	client, _ := api.NewClient(config)	return client}func regProxy(c *api.Client, name string, id string, address string, tags []string, port int){	reg := &api.AgentServiceRegistration{		Name: name,		ID: id,		Address: address,		Tags: tags,		Port: port,		Weights: &api.AgentWeights{			Passing: 10,			Warning: 1,		},		Check: &api.AgentServiceCheck{			Interval: "30s",			Timeout: "5s",			TCP: fmt.Sprintf("%s:%s", address, port),		},	}	if err := c.Agent().ServiceRegister(reg); err != nil {		log.Fatal("register service failed " + id)	}}func main() {	c := makeClient()	regProxy(c, "outline-ss-server", "ss-1", "prom2.switfin.org", []string{"outline"}, 9000)	regProxy(c, "outline-ss-server", "ss-2", "prom1.switfin.org", []string{"outline"}, 9000)	service, got, err:= c.Agent().Service("ss-1", nil)	log.Printf("get by agent service -> %+v", service)	log.Printf("get by agent service got -> %+v", got)	log.Println(err)	//service, got, err = c.Agent().AgentHealthServiceByID("ss-1", nil)	s, outs, err := c.Agent().AgentHealthServiceByID("ss-1")	log.Printf("checker info -> %+v", outs)	log.Printf("checker string info -> %+v", s)	_, checkList, err := c.Agent().AgentHealthServiceByName("outline-ss-server")	randChecker := checkList[rand.Intn(len(checkList))]	log.Printf("rand service check service -> %+v", randChecker.Service)}
+package main
+
+import (
+	"log"
+
+	"github.com/haodiaodemingzi/cloudfeet/pkg/consul"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
+)
+
+func init(){
+	settings.Setup()
+	consul.Setup()
+}
+
+
+
+func main() {
+	_ = consul.RegisterProxyNode("prom2.switfin.org", 9000, "gcp", "usa")
+	_ = consul.RegisterProxyNode("prom.switfin.org", 9000, "gcp", "usa")
+	service, _ := consul.GetService("outline-prom.switfin.org")
+	log.Printf("get prom service -> %+v", service)
+	service2, _ := consul.GetService("outline-prom2.switfin.org")
+	log.Printf("get prom2 service -> %+v", service2)
+
+	healthService, _ := consul.GetRandomProxyService("outline-proxy")
+	log.Printf("get random health service -> %+v", healthService)
+}
+
+
