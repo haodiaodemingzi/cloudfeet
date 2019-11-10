@@ -33,5 +33,9 @@
     },
     "consul": {
         "addr": "106.13.3.238:8500"
+    },
+    "outline": {
+        "port": 1024,
+        "api_key": "dev"
     }
 }

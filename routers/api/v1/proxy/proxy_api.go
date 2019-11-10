@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,7 @@ import (
 	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	proxyService "github.com/haodiaodemingzi/cloudfeet/services/proxy_service"
 
+	"github.com/haodiaodemingzi/cloudfeet/middlewares"
 	res "github.com/haodiaodemingzi/cloudfeet/pkg/http/response"
 )
 
@@ -24,10 +26,22 @@ type ProxyInfo struct {
 // @Failure 500 {object} response.Template
 // @Router /api/v1/config/mysql [get]
 func GetProxy(c *gin.Context) {
-	connInfo, err := proxyService.ProxyConnInfo()
-	log.Info("ss配置: %+v", connInfo)
+	claims, err := middlewares.ParseToken(c.Request.Header.Get("Token"))
+	if err != nil{
+		log.Error("claims err %s", err.Error())
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+
+	if claims == nil {
+		log.Error("get user claims nil")
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+	}
+	connInfo, err := proxyService.ProxyConnInfo(claims.Username)
+	fmt.Println(err)
 	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
 	}
 	res.Response(c, http.StatusOK, e.SUCCESS, connInfo)
 }

@@ -74,7 +74,7 @@ func PullDomains(c *gin.Context) {
 	}
 
 	log.Info("map data item = ", data)
-	domainList := []string{}
+	var domainList []string
 	pacList, err := pac_service.GetDomains(data)
 
 	if pacList == nil || err != nil {

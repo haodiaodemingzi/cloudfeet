@@ -33,7 +33,7 @@ func Setup() {
 		ReportCaller: false,
 		Level:        level,
 	}
-	logger.SetOutput(os.Stdout)
+	logger.SetOutput(file)
 }
 
 func Test(msg string){

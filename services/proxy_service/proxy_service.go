@@ -3,8 +3,9 @@ package proxy_service
 import (
 	"errors"
 	"fmt"
+	"gopkg.in/resty.v1"
 
-	"github.com/go-resty/resty/v2"
+	httpclient "github.com/go-resty/resty/v2"
 
 	"github.com/haodiaodemingzi/cloudfeet/models"
 	"github.com/haodiaodemingzi/cloudfeet/pkg/consul"
@@ -14,12 +15,40 @@ import (
 
 // 随机获取代理链接信息
 // TODO: 后期智能根据负载和网络状况返回
-func ProxyConnInfo() (models.ProxyModel, error) {
+// get proxy info from consul service
+func ProxyConnInfo(id string) (models.ProxyModel, error) {
+	/*
 	var model = &models.ProxyModel{}
 	proxyModel, err := model.RandomProxy()
 	if err != nil {
 		log.Error("获取ss配置失败: ", err.Error())
 	}
+	*/
+	var proxyModel models.ProxyModel
+	service, err := consul.GetRandomProxyService("outline-proxy")
+	if err != nil{
+		return models.ProxyModel{}, err
+	}
+	if service == nil{
+		return models.ProxyModel{}, errors.New("can't find service for outline-proxy")
+	}
+
+	client := httpclient.New()
+	outlineAPI := "https://" + service.Address + ":8081/access-keys"
+	payload := map[string]interface{}{
+		"id": "outline-" + id,
+		"port": 10247,
+		"password": "Divein" + id,
+	}
+	resp, err := client.R().SetBody(payload).Post(outlineAPI)
+	if resp !=nil && resp.StatusCode() == 201{
+		return proxyModel, errors.New("get proxy failed")
+	}
+	proxyModel.Server = service.Address
+	proxyModel.Port = 10248
+	proxyModel.Name = "outline-proxy-" + service.Address
+	proxyModel.EncryptMethod = "chacha20-poly1305"
+	proxyModel.Password = "Diveinedu"
 
 	return proxyModel, err
 }

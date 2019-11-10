@@ -13,7 +13,7 @@ func init(){
 
 func main(){
 	//deviceID := "D26384628B2C1237" //ptx
-	deviceID := "D26384628B3D1723" // daxue
+	deviceID := "cloudfeet" // daxue
 	//
 	passwordMD5 := utils.EncodeMD5(deviceID + `|` + settings.Config.Jwt.Secret)
 	fmt.Println("password_md5 -> " + passwordMD5)

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/haodiaodemingzi/cloudfeet/models"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/consul"
 	"github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 	"github.com/haodiaodemingzi/cloudfeet/routers"
@@ -15,6 +16,8 @@ func init() {
 	settings.Setup()
 	models.Setup()
 	logging.Setup()
+	consul.Setup()
+
 }
 
 // @title Golang Gin API

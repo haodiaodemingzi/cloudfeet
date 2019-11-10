@@ -19,6 +19,7 @@ type ConfModel struct {
 	Debug  bool
 	URL    URL
 	Consul Consul
+	Outline Outline
 }
 
 // Log config

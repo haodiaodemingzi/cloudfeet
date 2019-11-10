@@ -11,11 +11,12 @@ import (
 	"github.com/haodiaodemingzi/cloudfeet/services/node_service"
 )
 
+//NodeInfo
 type NodeInfo struct {
-	Server string `form:"server" json:"server" binding:"required"`
-	Port int `form:"port" json:"port" binding:"required"`
-	Provider string `form:"provider" json:"provider" binding:"required"`
-	Region string `form:"region" json:"region" binding:"required"`
+	Server string `form:"server" json:"server"`
+	Port int `form:"port" json:"port"`
+	Provider string `form:"provider" json:"provider"`
+	Region string `form:"region" json:"region"`
 }
 
 
@@ -33,6 +34,14 @@ func RegisterNode(c *gin.Context) {
 		return
 	}
 	log.Info("node配置: %+v", nodeInfo)
+	// outline api server from c.request port is 8081
+	if nodeInfo.Server == "" {
+		nodeInfo.Server = c.ClientIP()
+	}
+	if nodeInfo.Port == 0 {
+		nodeInfo.Port = 8081
+	}
+
 	err = node_service.AddNode(
 		nodeInfo.Server, nodeInfo.Port, nodeInfo.Provider, nodeInfo.Region)
 	if err != nil {
