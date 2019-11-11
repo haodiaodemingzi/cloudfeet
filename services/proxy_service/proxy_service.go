@@ -1,6 +1,7 @@
 package proxy_service
 
 import (
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"gopkg.in/resty.v1"
@@ -34,21 +35,25 @@ func ProxyConnInfo(id string) (models.ProxyModel, error) {
 	}
 
 	client := httpclient.New()
-	outlineAPI := "https://" + service.Address + ":8081/access-keys"
+	client.SetTLSClientConfig(&tls.Config{ InsecureSkipVerify: true })
+	// TODO: add api key from settings
+	outlineAPI := "https://" + service.Address + ":8081/TestApiPrefix/access-keys"
 	payload := map[string]interface{}{
 		"id": "outline-" + id,
 		"port": 10247,
 		"password": "Divein" + id,
 	}
+	log.Info("payload json %+v", payload)
+
 	resp, err := client.R().SetBody(payload).Post(outlineAPI)
-	if resp !=nil && resp.StatusCode() == 201{
+	if err != nil || resp.StatusCode() != 201 {
 		return proxyModel, errors.New("get proxy failed")
 	}
 	proxyModel.Server = service.Address
-	proxyModel.Port = 10248
-	proxyModel.Name = "outline-proxy-" + service.Address
-	proxyModel.EncryptMethod = "chacha20-poly1305"
-	proxyModel.Password = "Diveinedu"
+	proxyModel.Port = payload["port"].(int)
+	proxyModel.Name = payload["id"].(string)
+	proxyModel.EncryptMethod = "chacha20-ietf-poly1305"
+	proxyModel.Password = payload["password"].(string)
 
 	return proxyModel, err
 }
@@ -77,11 +82,12 @@ func AddOutlineProxy() (map[string]interface{},error){
 	apiKEY := "api"
 	outlineAPI := fmt.Sprintf("https://%s:%d/%s/access-key",
 		nodeService.Address, nodeService.Port, apiKEY)
-	client := resty.New()
 	// read from setting
+	client := resty.New()
+	client.SetTLSClientConfig(&tls.Config{ InsecureSkipVerify: true })
 	body := map[string]interface{}{"username": "testuser", "password": "Diveinedu",}
 	resp, err := client.R().SetBody(body).Post(outlineAPI)
-	if resp.StatusCode() != 201{
+	if resp != nil && resp.StatusCode() != 201{
 		return nil, errors.New("post new access-key failed")
 	}
 	return body, nil
