@@ -15,8 +15,8 @@ import (
 )
 
 type ProxyInfo struct {
-	Method string `form:"method" json:"method" binding:"required"`
-	Port int `form:"port" json:"port" binding:"required"`
+	Method   string `form:"method" json:"method" binding:"required"`
+	Port     int    `form:"port" json:"port" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
@@ -27,7 +27,7 @@ type ProxyInfo struct {
 // @Router /api/v1/config/mysql [get]
 func GetProxy(c *gin.Context) {
 	claims, err := middlewares.ParseToken(c.Request.Header.Get("Token"))
-	if err != nil{
+	if err != nil {
 		log.Error("claims err %s", err.Error())
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
@@ -54,7 +54,7 @@ func GetProxy(c *gin.Context) {
 func RegisterProxy(c *gin.Context) {
 	var proxyInfo ProxyInfo
 	err := c.ShouldBindJSON(&proxyInfo)
-	if err != nil{
+	if err != nil {
 		log.Error("绑定form表单参数错误")
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
@@ -70,6 +70,7 @@ func RegisterProxy(c *gin.Context) {
 	res.Response(c, http.StatusOK, e.SUCCESS, nil)
 }
 
+// DeleteProxy ...
 // @Summary delete a proxy from node
 // @Produce  json
 // @Success 200 {object} response.Template
