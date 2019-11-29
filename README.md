@@ -1,5 +1,5 @@
 # install
-
+# install 
     git clone repo
     GO111MODULE=on go mod download
     go run main.go 
