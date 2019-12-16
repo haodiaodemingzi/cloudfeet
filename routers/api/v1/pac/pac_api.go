@@ -16,7 +16,6 @@ import (
 	res "github.com/haodiaodemingzi/cloudfeet/pkg/http/response"
 )
 
-
 type DomainInfo struct {
 	Source  string `json:"source"`
 	Domains string `json:"domains"`
@@ -36,7 +35,7 @@ type CheckedDomain struct {
 func UploadDomains(c *gin.Context) {
 	var domainInfo DomainInfo
 	err := c.BindJSON(&domainInfo)
-	if err != nil || domainInfo.Domains == ""{
+	if err != nil || domainInfo.Domains == "" {
 		log.Error("post upload domain json data error", domainInfo)
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
@@ -113,7 +112,7 @@ func UpdateDomains(c *gin.Context) {
 // UploadDomains ...
 func UploadDomainFile(c *gin.Context) {
 	body := c.Request.Body
-	x, err:= ioutil.ReadAll(body)
+	x, err := ioutil.ReadAll(body)
 	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
