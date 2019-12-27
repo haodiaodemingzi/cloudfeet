@@ -15,9 +15,9 @@ var ConsulConn *api.Client
 // Setup comment
 func Setup() {
 	client, err := api.NewClient(&api.Config{
-		Address: settings.Config.Consul.Addr,
-		Scheme: "http",
-		Datacenter: settings.Config.Consul.DC,})
+		Address:    settings.Config.Consul.Addr,
+		Scheme:     "http",
+		Datacenter: settings.Config.Consul.DC})
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +31,7 @@ func GetService(serviceID string) (*api.AgentService, error) {
 }
 
 // GetServices ...
-func GetServices(map[string]*api.AgentService, error) (map[string]*api.AgentService, error){
+func GetServices(map[string]*api.AgentService, error) (map[string]*api.AgentService, error) {
 	services, err := ConsulConn.Agent().Services()
 	if err != nil {
 		log.Fatal("Get service list error :" + err.Error())
@@ -39,8 +39,8 @@ func GetServices(map[string]*api.AgentService, error) (map[string]*api.AgentServ
 	return services, err
 }
 
-// TODO: set constant in module
-func RegisterProxyNode(server string, port int, provider string, region string) error{
+// TODO: set constant in module, add prometheus service register
+func RegisterProxyNode(server string, port int, provider string, region string) error {
 	serviceId := "outline-" + server
 	serviceName := "outline-proxy"
 	reg := makeServiceReg(serviceId, serviceName, []string{"proxy", "v1"}, server, port)
@@ -49,28 +49,28 @@ func RegisterProxyNode(server string, port int, provider string, region string) 
 	}
 	reg.Meta = metaInfo
 	reg.Check = &api.AgentServiceCheck{
-		Interval: "120s",
-		Timeout: "5s",
-		TCP: fmt.Sprintf("%s:%d", server, port),
+		Interval:                       "120s",
+		Timeout:                        "5s",
+		TCP:                            fmt.Sprintf("%s:%d", server, port),
 		DeregisterCriticalServiceAfter: "90m",
 	}
 
 	// make service
 	err := ConsulConn.Agent().ServiceRegister(&reg)
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 	return err
 }
 
-func makeServiceCheckReg(serviceName string, serviceID string){
+func makeServiceCheckReg(serviceName string, serviceID string) {
 }
 
 func makeServiceReg(
 	serviceID string, serviceName string, tags []string,
-	addr string, port int) api.AgentServiceRegistration{
+	addr string, port int) api.AgentServiceRegistration {
 	return api.AgentServiceRegistration{
-		ID:     serviceID,
+		ID:      serviceID,
 		Name:    serviceName,
 		Address: addr,
 		Port:    port,
@@ -82,18 +82,17 @@ func DeRegisterService(serviceID string) error {
 	return ConsulConn.Agent().ServiceDeregister(serviceID)
 }
 
-func GetHealthServices(serviceName string) ([]api.AgentServiceChecksInfo, error){
+func GetHealthServices(serviceName string) ([]api.AgentServiceChecksInfo, error) {
 	_, serviceList, err := ConsulConn.Agent().AgentHealthServiceByName(serviceName)
 	return serviceList, err
 }
 
-func GetRandomProxyService(serviceName string) (*api.AgentService, error){
+func GetRandomProxyService(serviceName string) (*api.AgentService, error) {
 	serviceList, err := GetHealthServices(serviceName)
-	if err != nil || len(serviceList) == 0{
+	if err != nil || len(serviceList) == 0 {
 		return &api.AgentService{}, err
 	}
 
 	random := serviceList[rand.Intn(len(serviceList))]
 	return random.Service, nil
 }
-

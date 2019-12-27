@@ -2,12 +2,12 @@
     "gin": {
         "port": 8082,
         "host": "0.0.0.0",
-        "base_url": "http://localhost:8082/api/v1/",
+        "base_url": "https://dev.cloudfeet.tk/api/v1/",
         "run_mode": "debug"
     },
     "mysql": {
         "database": "cloudfeet",
-        "host": "106.13.3.238",
+        "host": "dev.cloudfeet.tk",
         "port": 3306,
         "user": "root",
         "password": "root@12345",
@@ -17,7 +17,7 @@
         "secret": "jhp1!T!C!#okkzBoTK8!"
     },
     "log": {
-        "path": "./cloudfeet.log",
+        "path": "/var/log/cloudfeet.log",
         "level": "debug"
     },
     "url": {
@@ -32,10 +32,10 @@
         "node": "/node"
     },
     "consul": {
-        "addr": "106.13.3.238:8500"
+        "addr": "dev.cloudfeet.tk:8500"
     },
     "outline": {
-        "port": 1024,
-        "api_key": "dev"
+        "port": 8081,
+        "api_key": "abcd1234"
     }
 }
