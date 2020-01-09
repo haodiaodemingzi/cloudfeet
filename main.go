@@ -30,6 +30,5 @@ func main() {
 	r := routers.InitRouter()
 
 	endPoint := fmt.Sprintf("%s:%d", settings.Config.Gin.Host, settings.Config.Gin.Port)
-	fmt.Println("hello")
 	_ = r.Run(endPoint)
 }

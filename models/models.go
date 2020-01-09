@@ -28,7 +28,6 @@ type PacModel struct {
 	Source string `json:"source"`
 }
 
-
 type ProxyModel struct {
 	Model
 	Server        string `json:"server"`
@@ -48,9 +47,9 @@ type UserModel struct {
 	Region   string `json:"region"`
 	Status   int    `json:"status"`
 	Source   string `json:"source"`
-	quota    int    `json:"quota"`
+	Quota    int    `json:"quota"`
+	Comment  string `json:"comment"`
 }
-
 
 // Setup initializes the database instance
 func Setup() {

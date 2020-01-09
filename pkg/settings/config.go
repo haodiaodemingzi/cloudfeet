@@ -2,6 +2,7 @@ package settings
 
 import (
 	"fmt"
+	"os"
 	"path"
 	"path/filepath"
 	"runtime"
@@ -12,13 +13,13 @@ import (
 
 // ConfModel ...
 type ConfModel struct {
-	MySQL  MySQL
-	Jwt    Jwt
-	Log    Log
-	Gin    Gin
-	Debug  bool
-	URL    URL
-	Consul Consul
+	MySQL   MySQL
+	Jwt     Jwt
+	Log     Log
+	Gin     Gin
+	Debug   bool
+	URL     URL
+	Consul  Consul
 	Outline Outline
 }
 
@@ -123,9 +124,13 @@ func FindRootDir() string {
 // Setup init all config
 func Setup() {
 	root := FindRootDir()
+	systemConfig := "/etc/cloudfeet/"
+	if _, err := os.Stat(systemConfig); err == nil {
+		root = systemConfig
+	}
 	configPath := filepath.Join(root, "conf")
 
-	fmt.Println("log path: ", configPath)
+	fmt.Println("configpath : ", configPath)
 
 	Viper.SetConfigName("app")
 	Viper.AddConfigPath(configPath)

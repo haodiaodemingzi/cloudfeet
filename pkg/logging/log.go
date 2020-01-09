@@ -1,6 +1,7 @@
 package logging
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/sirupsen/logrus"
@@ -22,8 +23,9 @@ func Setup() {
 	}
 
 	logfile := settings.Config.Log.Path
+	fmt.Println("logfile ===", logfile)
 	file, err := os.OpenFile(logfile, os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
@@ -36,7 +38,7 @@ func Setup() {
 	logger.SetOutput(file)
 }
 
-func Test(msg string){
+func Test(msg string) {
 	logger.Debug(msg)
 }
 
@@ -63,4 +65,3 @@ func Error(s string, v ...interface{}) {
 func Panic(s string, v ...interface{}) {
 	logger.Panicf(s, v...)
 }
-

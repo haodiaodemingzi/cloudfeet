@@ -52,7 +52,7 @@ func RegisterProxyNode(server string, port int, provider string, region string) 
 		Interval:                       "120s",
 		Timeout:                        "5s",
 		TCP:                            fmt.Sprintf("%s:%d", server, port),
-		DeregisterCriticalServiceAfter: "90m",
+		DeregisterCriticalServiceAfter: "30m",
 	}
 
 	// make service

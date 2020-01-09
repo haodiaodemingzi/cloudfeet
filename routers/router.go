@@ -22,19 +22,18 @@ func InitRouter() *gin.Engine {
 	r.Use(middlewares.JwtMiddleware())
 	// Apply the middleware to the router (works with groups too)
 	/*
-	r.Use(cors.Middleware(cors.Config{
-		Origins:        "*",
-		Methods:        "GET, PUT, POST, DELETE, OPTIONS",
-		RequestHeaders: "Origin, Authorization, Content-Type, Access-Control-Allow-Origin, Token",
-		ExposedHeaders: "",
-		MaxAge: 50 * time.Second,
-		Credentials: true,
-		ValidateHeaders: false,
-	}))
+		r.Use(cors.Middleware(cors.Config{
+			Origins:        "*",
+			Methods:        "GET, PUT, POST, DELETE, OPTIONS",
+			RequestHeaders: "Origin, Authorization, Content-Type, Access-Control-Allow-Origin, Token",
+			ExposedHeaders: "",
+			MaxAge: 50 * time.Second,
+			Credentials: true,
+			ValidateHeaders: false,
+		}))
 	*/
 	r.Use(middlewares.CorsMiddleware())
 	r.Use(gin.Recovery())
-
 
 	// swagger 文档
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -52,7 +51,7 @@ func InitRouter() *gin.Engine {
 	//api.GET("/proxy", proxy.GetProxy)
 	api.GET(settings.Config.URL.ProxyInfo, proxy.GetProxy)
 	api.POST(settings.Config.URL.ProxyInfo, proxy.RegisterProxy)
-	api.DELETE(settings.Config.URL.ProxyInfo + "/:server", proxy.DeleteProxy)
+	api.DELETE(settings.Config.URL.ProxyInfo+"/:server", proxy.DeleteProxy)
 
 	// pac api maps
 	//api.POST("/pac/domains", pac.UploadDomains)
@@ -73,6 +72,7 @@ func InitRouter() *gin.Engine {
 
 	// api for outline node
 	api.POST(settings.Config.URL.Node, node.RegisterNode)
+	api.GET(settings.Config.URL.Node, node.GetNodeList)
 
 	// admin api
 	web := r.Group("/admin")
