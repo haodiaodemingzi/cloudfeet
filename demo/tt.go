@@ -1,42 +1,29 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
-	"math/rand"
-
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/consul"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 )
 
-type Person struct {
-	Name string
-	Age  int
+func init(){
+	settings.Setup()
+	consul.Setup()
 }
 
-var logger = logging.GetLogger()
 
-func params(maps map[string]interface{}) {
-	name := maps["name"].(string)
-	age := maps["age"].(int)
-	//logger.Debugf("hell world %s", name)
-	logger.Debug("name is %s,age is %d", name, age)
-}
 
 func main() {
-	fmt.Println("hello world")
-	amp := make(map[string]interface{})
-	amp["name"] = "james"
-	amp["age"] = 23
-	ttList := []string{"a", "b"}
-	var randNum = len(ttList)
+	_ = consul.RegisterProxyNode("prom2.switfin.org", 9000, "gcp", "usa")
+	_ = consul.RegisterProxyNode("prom.switfin.org", 9000, "gcp", "usa")
+	service, _ := consul.GetService("outline-prom.switfin.org")
+	log.Printf("get prom service -> %+v", service)
+	service2, _ := consul.GetService("outline-prom2.switfin.org")
+	log.Printf("get prom2 service -> %+v", service2)
 
-	x := rand.Intn(randNum)
-	logger.Debug("x is %d", x)
-	logger.Debug("v is %s", ttList[x])
-
-	p := Person{
-		Name: "james",
-		Age:  23,
-	}
-	fmt.Printf("person dumps %+v", p)
+	healthService, _ := consul.GetRandomProxyService("outline-proxy")
+	log.Printf("get random health service -> %+v", healthService)
 }
+
+

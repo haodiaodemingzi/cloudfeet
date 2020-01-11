@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 nvram set ss_enable=1
 nvram set ss_mtu=1492
 nvram set ss_multiport=22,80,443,1935
@@ -29,11 +30,14 @@ fi
 report_script="/tmp/reportdns.sh"
 script_data='#!/bin/bash
 logger "域名缓存分析.."
+kill -USR1 `cat /var/run/dnsmasq.pid`
+sleep 5
 CLOUDFEET_TOKEN=`nvram get CLOUDFEET_TOKEN`
 wget --no-check-certificate --header="Token: ${CLOUDFEET_TOKEN}" \
-         --post-data="`cat /tmp/dns.cache|uniq`" {{.DomainsUploadURL}}
+         --post-data="`cat /tmp/dns.cache|uniq`" {{.DomainsUploadURL}} -O /dev/null
 '
 printf  "$script_data" > $report_script
+
 chmod 755 ${report_script}
 
 ipset_gfw=ss_spec_dst_fw

@@ -5,7 +5,8 @@ import (
 	"html/template"
 	"path/filepath"
 
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 )
 
 var boxScriptTpl string = `
@@ -65,6 +66,7 @@ func RenderBoxScript(server string, username string,
 		Password: password, Method: method, GfwListURL: gfwlistURL,
 		AuthURL: authURL, DomainsUploadURL: domainsFileURL,
 	}
+	log.Info("ssconfig : %+v", ssConfig)
 	err := t.Execute(buf, ssConfig)
 	return buf.String(), err
 }

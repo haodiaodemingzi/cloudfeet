@@ -4,17 +4,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type UserModel struct {
-	Model
-	UserName string `gorm:"column:username;type:varchar(100);unique_index"`
-	Password string
-	Role     string
-	Region   string
-	Status   int
-	Source   string
-	quota    int
-}
-
 func (UserModel) TableName() string {
 	return "user"
 }

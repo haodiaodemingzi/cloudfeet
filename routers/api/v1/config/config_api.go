@@ -5,10 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/e"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 
-	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
+	res "github.com/haodiaodemingzi/cloudfeet/pkg/http/response"
 )
 
 // @Summary Get a single article

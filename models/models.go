@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
 
@@ -18,6 +18,37 @@ type Model struct {
 	ID         int             `gorm:"primary_key" json:"id"`
 	CreateTime utils.LocalTime `gorm:"default:CURRENT_TIMESTAMP" json:"create_time"`
 	UpdateTime utils.LocalTime `gorm:"default:CURRENT_TIMESTAMP" json:"update_time"`
+}
+
+type PacModel struct {
+	Model
+	Domain string `gorm:"type:varchar(255);index" json:"domain"`
+	Region string `json:"region"`
+	Status int    `json:"status"`
+	Source string `json:"source"`
+}
+
+type ProxyModel struct {
+	Model
+	Server        string `json:"server"`
+	Domain        string `gorm:"type:varchar(255);index" json:"domain"`
+	Port          int    `json:"port"`
+	EncryptMethod string `json:"encrypt_method"`
+	Password      string `json:"password"`
+	Status        int    `json:"status"`
+	Name          string `json:"name"`
+}
+
+type UserModel struct {
+	Model
+	UserName string `gorm:"column:username;type:varchar(100);unique_index" json:"username"`
+	Password string `json:"password"`
+	Role     string `json:"role"`
+	Region   string `json:"region"`
+	Status   int    `json:"status"`
+	Source   string `json:"source"`
+	Quota    int    `json:"quota"`
+	Comment  string `json:"comment"`
 }
 
 // Setup initializes the database instance
@@ -39,7 +70,8 @@ func Setup() {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 
-	db.LogMode(settings.Config.MySQL.Debug)
+	//db.LogMode(settings.Config.MySQL.Debug)
+	db.LogMode(true)
 	db.AutoMigrate(&PacModel{}, &ProxyModel{}, &UserModel{})
 }
 

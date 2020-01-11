@@ -2,7 +2,7 @@ package auth_service
 
 import (
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 )
 
 

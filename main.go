@@ -6,8 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/settings"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/consul"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 	"github.com/haodiaodemingzi/cloudfeet/routers"
 )
 
@@ -15,6 +16,8 @@ func init() {
 	settings.Setup()
 	models.Setup()
 	logging.Setup()
+	consul.Setup()
+
 }
 
 // @title Golang Gin API
@@ -22,7 +25,6 @@ func init() {
 // @description An config api
 // @termsOfService https://github.com/haodiaodemingzi/cloudfeet
 func main() {
-	logging.Test("hello logging ====")
 	gin.SetMode(gin.DebugMode)
 
 	r := routers.InitRouter()

@@ -1,0 +1,66 @@
+version: '2'
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+services:
+  api:
+    image: registry.cn-hongkong.aliyuncs.com/1024w/cloudfeet-api:release/v2.0
+    ports:
+    - 8080:8080
+
+  consul1:
+    image: consul
+    container_name: node1
+    command: agent -server -bootstrap-expect=3 -node=node1 -bind=0.0.0.0 -client=0.0.0.0 -datacenter=dc1
+
+  consul2:
+    image: consul
+    container_name: node2
+    command: agent -server -retry-join=node1 -node=node2 -bind=0.0.0.0 -client=0.0.0.0 -datacenter=dc1
+    depends_on:
+      - consul1
+
+  consul3:
+    image: consul
+    container_name: node3
+    command: agent -server -retry-join=node1 -node=node3 -bind=0.0.0.0 -client=0.0.0.0 -datacenter=dc1
+    depends_on:
+      - consul2
+
+  consul4:
+    image: consul
+    container_name: node5
+    command: agent -retry-join=node1 -node=node4 -bind=0.0.0.0 -client=0.0.0.0 -datacenter=dc1 -ui
+    volumes:
+      - /opt/consul:/consul/data
+    ports:
+      - 8500:8500
+      - 8600:8600
+      - 8600:8600/udp
+    depends_on:
+      - consul2
+      - consul3
+  prometheus:
+    image: quay.io/prometheus/prometheus:v2.0.0
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9090:9090
+    restart: always
+  grafana:
+    image: grafana/grafana:5.2.2
+    user: "104"
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    restart: always

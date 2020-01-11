@@ -12,10 +12,11 @@ WORKDIR $BUILD_DIR
 COPY go.mod $BUILD_DIR
 COPY go.sum $BUILD_DIR
 RUN go mod download
+#RUN go test ./...
 ADD . $BUILD_DIR
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o /usr/bin/$APP
 RUN chmod +x /usr/bin/$APP
 
 CMD ["cloudfeet-api"]
-expose 8082
+EXPOSE 8082

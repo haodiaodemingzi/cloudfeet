@@ -2,22 +2,40 @@
     "gin": {
         "port": 8082,
         "host": "0.0.0.0",
-        "base_url": "https://cloudfeet.tk/api/v1/",
-        "run_mode": "release"
+        "base_url": "https://staging.cloudfeet.tk/api/v1/",
+        "run_mode": "debug"
     },
     "mysql": {
         "database": "cloudfeet",
-        "host": "evencc.cpigq4qrrdt0.ap-east-1.rds.amazonaws.com",
+        "host": "test.cloudfeet.tk",
         "port": 3306,
-        "user": "evenpay",
-        "password": "exToqwlNvyX9",
+        "user": "root",
+        "password": "root@12345",
         "debug": true
     },
     "jwt": {
         "secret": "jhp1!T!C!#okkzBoTK8!"
     },
     "log": {
-        "path": "/var/log/cloudfeet.log",
-        "level": "info"
+        "path": "./cloudfeet.log",
+        "level": "debug"
+    },
+    "url": {
+        "auth_token": "/auth/token",
+        "pull_domains": "/pac/domains",
+        "update_domains": "/pac/domains",
+        "upload_domains": "/pac/domains",
+        "upload_dns_file": "/pac/cache",
+        "pac_config": "/pac/config",
+        "init_script": "/pac/script",
+        "proxy_info": "/proxy",
+        "node": "/node"
+    },
+    "consul": {
+        "addr": "test.cloudfeet.tk:8500"
+    },
+    "outline": {
+        "port": 8081,
+        "api_key": "abcd1234"
     }
 }

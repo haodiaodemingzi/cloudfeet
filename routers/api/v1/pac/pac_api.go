@@ -2,21 +2,19 @@ package pac
 
 import (
 	"bufio"
-	"bytes"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/e"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	"github.com/haodiaodemingzi/cloudfeet/services/pac_service"
 
-	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
+	res "github.com/haodiaodemingzi/cloudfeet/pkg/http/response"
 )
-
 
 type DomainInfo struct {
 	Source  string `json:"source"`
@@ -37,7 +35,7 @@ type CheckedDomain struct {
 func UploadDomains(c *gin.Context) {
 	var domainInfo DomainInfo
 	err := c.BindJSON(&domainInfo)
-	if err != nil {
+	if err != nil || domainInfo.Domains == "" {
 		log.Error("post upload domain json data error", domainInfo)
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
@@ -75,7 +73,7 @@ func PullDomains(c *gin.Context) {
 	}
 
 	log.Info("map data item = ", data)
-	domainList := []string{}
+	var domainList []string
 	pacList, err := pac_service.GetDomains(data)
 
 	if pacList == nil || err != nil {
@@ -113,20 +111,13 @@ func UpdateDomains(c *gin.Context) {
 
 // UploadDomains ...
 func UploadDomainFile(c *gin.Context) {
-	file, _, err := c.Request.FormFile("file")
-	if err != nil {
-		log.Fatal(err.Error())
-		res.Response(c, http.StatusOK, e.ERROR, nil)
-		return
-	}
-	var buf bytes.Buffer
-
-	_, err = io.Copy(&buf, file)
+	body := c.Request.Body
+	x, err := ioutil.ReadAll(body)
 	if err != nil {
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
 		return
 	}
-	content := buf.String()
+	content := string(x)
 	scanner := bufio.NewScanner(strings.NewReader(content))
 	var domainList []string
 	for scanner.Scan() {
@@ -134,12 +125,14 @@ func UploadDomainFile(c *gin.Context) {
 			domainList = append(domainList, line)
 		}
 	}
-	domains := strings.Join(domainList, ",")
-	log.Info("解析域名文件结果: %s", domains)
-	err = pac_service.SavePacDomain("box", &domains)
-	if err != nil {
-		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
-		return
+	if len(domainList) > 0 {
+		domains := strings.Join(domainList, ",")
+		log.Info("解析域名文件结果: %s", domains)
+		err = pac_service.SavePacDomain("box", &domains)
+		if err != nil {
+			res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+			return
+		}
 	}
 
 	res.Response(c, http.StatusOK, e.SUCCESS, nil)

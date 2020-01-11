@@ -7,12 +7,11 @@ import (
 
 	middleware "github.com/haodiaodemingzi/cloudfeet/middlewares"
 	"github.com/haodiaodemingzi/cloudfeet/models"
-	"github.com/haodiaodemingzi/cloudfeet/pkgs/e"
-	res "github.com/haodiaodemingzi/cloudfeet/pkgs/http/response"
-	log "github.com/haodiaodemingzi/cloudfeet/pkgs/logging"
+	"github.com/haodiaodemingzi/cloudfeet/pkg/e"
+	res "github.com/haodiaodemingzi/cloudfeet/pkg/http/response"
+	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	auth "github.com/haodiaodemingzi/cloudfeet/services/auth_service"
 )
-
 
 // @Summary user login
 // @Produce  json
@@ -41,5 +40,17 @@ func Login(c *gin.Context) {
 	res.Response(c, http.StatusOK, e.SUCCESS, data)
 }
 
-
-
+func UserInfo(c *gin.Context) {
+	claims, err := middleware.ParseToken(c.Request.Header.Get("Token"))
+	if err != nil {
+		log.Error(err.Error())
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+	userModel := &models.UserModel{}
+	where := map[string]interface{}{
+		"username": claims.Username,
+	}
+	userInfo, _ := userModel.Select(where)
+	res.Response(c, http.StatusOK, e.SUCCESS, userInfo)
+}
