@@ -17,7 +17,7 @@
         "secret": "jhp1!T!C!#okkzBoTK8!"
     },
     "log": {
-        "path": "/var/log/cloudfeet.log",
+        "path": "./xxoo.log",
         "level": "debug"
     },
     "url": {
