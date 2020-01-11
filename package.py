@@ -29,7 +29,7 @@ branch = os.getenv('GITHUB_REF', 'release')
 commit = os.getenv('GITHUB_SHA', 'abcd123')
 tag = 'latest'
 
-print "before active = {0}, region = {1}, tag={2}, commit={3}".format(active, region, tag, commit)
+print "before branch ==", branch
 
 if re.search(r'master', branch):
     tag = 'prod'
