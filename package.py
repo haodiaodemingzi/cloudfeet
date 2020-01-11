@@ -44,6 +44,7 @@ elif re.search(r'release|master', branch):
     tag = 'latest'
     active = 'prod'
 elif re.search(r'tag', branch):
+    pring("tag version ref====", branch)
     tag = re.search(r'tag.(v[\d\.]+)', branch).group(1)
     active = 'prod'
 else:
