@@ -21,7 +21,7 @@
         "level": "info"
     },
     "consul": {
-        "addr": "consul:8500"
+        "addr": "cloudfeet.tk:8500"
     },
     "outline": {
         "port": 8081,
