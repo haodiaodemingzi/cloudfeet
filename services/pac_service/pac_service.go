@@ -8,6 +8,7 @@ import (
 	"github.com/haodiaodemingzi/cloudfeet/models"
 	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
+	"github.com/haodiaodemingzi/cloudfeet/services/proxy_service"
 	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
 
@@ -96,23 +97,23 @@ func GenBoxConfig() (string, error) {
 }
 
 // 生成盒子配置内nil
-func GetBoxStartScript() (string, error) {
-	var proxyModel = &models.ProxyModel{}
+func GetBoxStartScript(user string) (string, error) {
+	//var proxyModel = &models.ProxyModel{}
 
-	proxyConfig, err := proxyModel.RandomProxy()
+	proxyModel, err := proxy_service.ProxyConnInfo(user)
 	if err != nil {
 		return "", err
 	}
 	gfwlistURL := settings.Config.Gin.BaseURL + `pac/config`
-	domainsFileURL:= settings.Config.Gin.BaseURL + `pac/domains/cache`
+	domainsFileURL := settings.Config.Gin.BaseURL + `pac/domains/cache`
 	authURL := settings.Config.Gin.BaseURL + `auth/token`
 
-	log.Info("获取proxyconfig配置 = ", proxyConfig)
+	log.Info("获取proxyconfig配置 = %+v", proxyModel)
 	log.Info("api url = ", gfwlistURL)
 
 	//gfwURL := settings.R
 	content, err := utils.RenderBoxScript(
-		proxyConfig.Server, proxyConfig.Name, proxyConfig.Password, proxyConfig.Port,
-		proxyConfig.EncryptMethod, authURL, gfwlistURL, domainsFileURL)
+		proxyModel.Server, proxyModel.Name, proxyModel.Password, proxyModel.Port,
+		proxyModel.EncryptMethod, authURL, gfwlistURL, domainsFileURL)
 	return content, err
 }

@@ -2,6 +2,7 @@ package pac
 
 import (
 	"bufio"
+	"github.com/haodiaodemingzi/cloudfeet/middlewares"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -152,8 +153,19 @@ func DownloadBoxConfig(c *gin.Context) {
 
 // 下载盒子启动脚本
 func DownloadBoxScript(c *gin.Context) {
+	claims, err := middlewares.ParseToken(c.Request.Header.Get("Token"))
+	if err != nil {
+		log.Error("claims err %s", err.Error())
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+		return
+	}
+
+	if claims == nil {
+		log.Error("get user claims nil")
+		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
+	}
 	// status = 1 被屏蔽的域名状态
-	content, err := pac_service.GetBoxStartScript()
+	content, err := pac_service.GetBoxStartScript(claims.Username)
 	if err != nil {
 		log.Error(err.Error())
 		res.Response(c, http.StatusBadRequest, e.ERROR, nil)
