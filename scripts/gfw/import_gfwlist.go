@@ -1,38 +1,54 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
+	"strings"
 	"net/http"
 
 	"github.com/haodiaodemingzi/cloudfeet/models"
 	log "github.com/haodiaodemingzi/cloudfeet/pkg/logging"
 	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
-	"github.com/haodiaodemingzi/cloudfeet/utils"
 )
 
-func init(){
+func init() {
 	settings.Setup()
 	models.Setup()
 	log.Setup()
 }
 
+func getGfwContent(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", fmt.Errorf("GET error: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("Status error: %v", resp.StatusCode)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("Read body: %v", err)
+	}
+
+	return string(data), nil
+}
 
 func main() {
-	userRules := []string{"||4ter2n.com", "|https://85.17.73.31/"}
-	client := &http.Client{}
-
-	gfw, err := utils.NewGFWList("https://raw.githubusercontent." +
-		"com/gfwlist/gfwlist/master/gfwlist.txt",
-		client, userRules, "gfwlist.txt", false)
+	url := `https://cokebar.github.io/gfwlist2dnsmasq/gfwlist_domain.txt`
+	content, err := getGfwContent(url)
 	if err != nil{
-		panic(err)
+		panic("get gfwlist file failed!!")
 	}
-	log.Debug("test map %+v", gfw.RuleMap)
-	for k, _ := range gfw.RuleMap{
+	domainList := strings.Split(content, "\n")
+	fmt.Println(len(domainList))
+	for _, item := range domainList{
 		pac := models.PacModel{}
-		pac.Domain = k
+		pac.Domain = item
 		pac.Status = 1
 		pac.Region = "china"
 		pac.FindOrCreate(pac.Domain)
-
 	}
 }
