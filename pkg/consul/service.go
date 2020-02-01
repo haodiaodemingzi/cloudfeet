@@ -50,9 +50,28 @@ func RegisterProxyNode(server string, port int, provider string, region string) 
 	reg.Meta = metaInfo
 	reg.Check = &api.AgentServiceCheck{
 		Interval:                       "120s",
-		Timeout:                        "5s",
+		Timeout:                        "10s",
 		TCP:                            fmt.Sprintf("%s:%d", server, port),
-		DeregisterCriticalServiceAfter: "30m",
+		DeregisterCriticalServiceAfter: "15m",
+	}
+
+	// make service
+	err := ConsulConn.Agent().ServiceRegister(&reg)
+	if err != nil {
+		panic(err)
+	}
+	return err
+}
+
+func RegisterMetricService(server string, port int) error {
+	serviceId := "metric-" + server
+	serviceName := "ss-metrics"
+	reg := makeServiceReg(serviceId, serviceName, []string{"metrics"}, server, port)
+	reg.Check = &api.AgentServiceCheck{
+		Interval:                       "120s",
+		Timeout:                        "10s",
+		HTTP:                           fmt.Sprintf("http://%s:%d/metrics", server, port),
+		DeregisterCriticalServiceAfter: "15m",
 	}
 
 	// make service

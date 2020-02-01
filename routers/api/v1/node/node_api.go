@@ -27,6 +27,8 @@ type NodeInfo struct {
 // @Router /api/v1/node [post]
 func RegisterNode(c *gin.Context) {
 	var nodeInfo NodeInfo
+
+	/*
 	err := c.ShouldBindJSON(&nodeInfo)
 	if err != nil {
 		log.Error("node 绑定form表单参数错误")
@@ -34,6 +36,9 @@ func RegisterNode(c *gin.Context) {
 		return
 	}
 	log.Info("node配置: %+v", nodeInfo)
+	*/
+	log.Info("node配置: %+v", nodeInfo)
+
 	// outline api server from c.request port is 8081
 	if nodeInfo.Server == "" {
 		nodeInfo.Server = c.ClientIP()
@@ -42,7 +47,7 @@ func RegisterNode(c *gin.Context) {
 		nodeInfo.Port = 8081
 	}
 
-	err = node_service.AddNode(
+	err := node_service.AddNode(
 		nodeInfo.Server, nodeInfo.Port, nodeInfo.Provider, nodeInfo.Region)
 	if err != nil {
 		log.Error("添加 node err %s", err.Error())
