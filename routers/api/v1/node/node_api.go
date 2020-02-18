@@ -27,7 +27,7 @@ type NodeInfo struct {
 // @Router /api/v1/node [post]
 func RegisterNode(c *gin.Context) {
 	var nodeInfo NodeInfo
-
+	c.BindJSON(&nodeInfo)
 	/*
 	err := c.ShouldBindJSON(&nodeInfo)
 	if err != nil {

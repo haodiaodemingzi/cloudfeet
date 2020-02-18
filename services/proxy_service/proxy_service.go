@@ -4,6 +4,8 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"strings"
+
 	"gopkg.in/resty.v1"
 
 	httpclient "github.com/go-resty/resty/v2"
@@ -14,18 +16,13 @@ import (
 	"github.com/haodiaodemingzi/cloudfeet/pkg/settings"
 )
 
+//ProxyConnInfo ...
 // 随机获取代理链接信息
 // TODO: 后期智能根据负载和网络状况返回
 // get proxy info from consul service
-func ProxyConnInfo(id string) (models.ProxyModel, error) {
-	/*
-		var model = &models.ProxyModel{}
-		proxyModel, err := model.RandomProxy()
-		if err != nil {
-			log.Error("获取ss配置失败: ", err.Error())
-		}
-	*/
+func ProxyConnInfo(username string) (models.ProxyModel, error) {
 	var proxyModel models.ProxyModel
+	var userModel models.UserModel
 	service, err := consul.GetRandomProxyService("outline-proxy")
 	if err != nil {
 		return models.ProxyModel{}, err
@@ -37,18 +34,23 @@ func ProxyConnInfo(id string) (models.ProxyModel, error) {
 	client := httpclient.New()
 	client.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 	// TODO: add api key from settings
-	outline_api_key := settings.Config.Outline.APIKEY
-	outline_api_port := settings.Config.Outline.Port
-	outlineAPI := "https://" + service.Address + ":" + outline_api_port + "/" + outline_api_key + "/access-keys"
+	outlineAPIKey := settings.Config.Outline.APIKEY
+	outlineAPIPort := settings.Config.Outline.Port
+	outlineAPI := "https://" + service.Address + ":" + outlineAPIPort + "/" + outlineAPIKey + "/access-keys"
+	userInfo, _ := userModel.Select(map[string]interface{}{"username": username})
+	outlineID := strings.Join([]string{"outline", username, userInfo.Comment}, "-")
+
 	log.Info("outline api - %s", outlineAPI)
+	// TODO: add salt from config in outline password, add port from outline
 	payload := map[string]interface{}{
-		"id":       "outline-" + id,
+		"id":       outlineID,
 		"port":     10247,
-		"password": "Divein" + id,
+		"password": "Divein" + username,
 	}
-	log.Info("payload json %+v", payload)
+	log.Info("payload json ---- %+v", payload)
 
 	resp, err := client.R().SetBody(payload).Post(outlineAPI)
+
 	if err != nil || resp.StatusCode() != 201 {
 		return proxyModel, errors.New("get proxy failed")
 	}
@@ -61,6 +63,7 @@ func ProxyConnInfo(id string) (models.ProxyModel, error) {
 	return proxyModel, err
 }
 
+// AddProxy ...
 func AddProxy(server string, port int, method string, password string) error {
 	var model = &models.ProxyModel{}
 
@@ -75,6 +78,7 @@ func AddProxy(server string, port int, method string, password string) error {
 	return model.FindOrCreate(model.Domain)
 }
 
+// AddOutlineProxy ...
 func AddOutlineProxy() (map[string]interface{}, error) {
 	nodeService, err := consul.GetRandomProxyService("outline-proxy")
 	if err != nil {
@@ -96,6 +100,7 @@ func AddOutlineProxy() (map[string]interface{}, error) {
 	return body, nil
 }
 
+// RemoveProxy ...
 func RemoveProxy(server string) error {
 	var model = &models.ProxyModel{}
 
