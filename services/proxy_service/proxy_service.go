@@ -38,7 +38,7 @@ func ProxyConnInfo(username string) (models.ProxyModel, error) {
 	outlineAPIPort := settings.Config.Outline.Port
 	outlineAPI := "https://" + service.Address + ":" + outlineAPIPort + "/" + outlineAPIKey + "/access-keys"
 	userInfo, _ := userModel.Select(map[string]interface{}{"username": username})
-	outlineID := strings.Join([]string{"outline", username, userInfo.Comment}, "-")
+	outlineID := strings.Join([]string{"outline", username[0:3], userInfo.Comment}, "-")
 
 	log.Info("outline api - %s", outlineAPI)
 	// TODO: add salt from config in outline password, add port from outline
