@@ -44,10 +44,10 @@ func ProxyConnInfo(username string) (models.ProxyModel, error) {
 	// TODO: add salt from config in outline password, add port from outline
 	payload := map[string]interface{}{
 		"id":       outlineID,
-		"port":     10247,
+		"port":     10247f
 		"password": "Divein" + username,
 	}
-	log.Info("payload json ---- %+v", payload)
+	log.Info("payload json = %+v", payload)
 
 	resp, err := client.R().SetBody(payload).Post(outlineAPI)
 
