@@ -22,7 +22,7 @@ import (
 // get proxy info from consul service
 func ProxyConnInfo(username string) (models.ProxyModel, error) {
 	var proxyModel models.ProxyModel
-	var userModel models.UserModel
+	// var userModel models.UserModel
 	service, err := consul.GetRandomProxyService("outline-proxy")
 	if err != nil {
 		return models.ProxyModel{}, err
@@ -37,8 +37,10 @@ func ProxyConnInfo(username string) (models.ProxyModel, error) {
 	outlineAPIKey := settings.Config.Outline.APIKEY
 	outlineAPIPort := settings.Config.Outline.Port
 	outlineAPI := "https://" + service.Address + ":" + outlineAPIPort + "/" + outlineAPIKey + "/access-keys"
-	userInfo, _ := userModel.Select(map[string]interface{}{"username": username})
-	outlineID := strings.Join([]string{"outline", username[0:3], userInfo.Comment}, "-")
+	// userInfo, _ := userModel.Select(map[string]interface{}{"username": username})
+	// will cause outline api create key bug
+	// outlineID := strings.Join([]string{"outline", username[0:3], userInfo.Comment}, "-")
+	outlineID := strings.Join([]string{"outline", username}, "-")
 
 	log.Info("outline api - %s", outlineAPI)
 	// TODO: add salt from config in outline password, add port from outline
