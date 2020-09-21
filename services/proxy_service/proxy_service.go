@@ -56,11 +56,19 @@ func ProxyConnInfo(username string) (models.ProxyModel, error) {
 	if err != nil || resp.StatusCode() != 201 {
 		return proxyModel, errors.New("get proxy failed")
 	}
-	proxyModel.Server = service.Address
-	proxyModel.Port = payload["port"].(int)
-	proxyModel.Name = payload["id"].(string)
-	proxyModel.EncryptMethod = "chacha20-ietf-poly1305"
-	proxyModel.Password = payload["password"].(string)
+	/*
+		proxyModel.Server = service.Address
+		proxyModel.Port = payload["port"].(int)
+		proxyModel.Name = payload["id"].(string)
+		proxyModel.EncryptMethod = "chacha20-ietf-poly1305"
+		proxyModel.Password = payload["password"].(string)
+	*/
+	// 写死大茶的地址
+	proxyModel.Server = "test.csdc.io"
+	proxyModel.Port = 2020
+	proxyModel.Name = "bigtea"
+	proxyModel.EncryptMethod = "rc4-md5"
+	proxyModel.Password = "NkXVfq358"
 
 	return proxyModel, err
 }
