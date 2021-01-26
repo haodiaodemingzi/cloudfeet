@@ -64,11 +64,11 @@ func ProxyConnInfo(username string) (models.ProxyModel, error) {
 		proxyModel.Password = payload["password"].(string)
 	*/
 	// 写死大茶的地址
-	proxyModel.Server = "test.csdc.io"
-	proxyModel.Port = 2020
+	proxyModel.Server = "box.csdc.io"
+	proxyModel.Port = 8788
 	proxyModel.Name = "bigtea"
-	proxyModel.EncryptMethod = "rc4-md5"
-	proxyModel.Password = "NkXVfq358"
+	proxyModel.EncryptMethod = "chacha20-ietf-poly1305"
+	proxyModel.Password = "rongjin"
 
 	return proxyModel, err
 }
