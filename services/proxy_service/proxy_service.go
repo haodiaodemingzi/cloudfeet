@@ -51,12 +51,12 @@ func ProxyConnInfo(username string) (models.ProxyModel, error) {
 	}
 	log.Info("payload json = %+v", payload)
 
-	resp, err := client.R().SetBody(payload).Post(outlineAPI)
+	//resp, err := client.R().SetBody(payload).Post(outlineAPI)
 
+	/*
 	if err != nil || resp.StatusCode() != 201 {
 		return proxyModel, errors.New("get proxy failed")
 	}
-	/*
 		proxyModel.Server = service.Address
 		proxyModel.Port = payload["port"].(int)
 		proxyModel.Name = payload["id"].(string)
